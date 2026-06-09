@@ -31,21 +31,16 @@ function ChatBox() {
 
     try {
       const res = await API.post("/api/chat", { message: input });
-      // Simulate typing delay for realistic feel
-      setTimeout(() => {
-        const botMessage = { role: "bot", content: res.data.reply };
-        setMessages((prev) => [...prev, botMessage]);
-        setIsLoading(false);
-      }, 1200);
+      const botMessage = { role: "bot", content: res.data.reply };
+      setMessages((prev) => [...prev, botMessage]);
+      setIsLoading(false);
     } catch (err) {
-      setTimeout(() => {
-        const errorMessage = err.response?.data?.error || "Sorry, I am having trouble connecting to the server.";
-        setMessages((prev) => [
-          ...prev,
-          { role: "bot", content: errorMessage },
-        ]);
-        setIsLoading(false);
-      }, 1000);
+      const errorMessage = err.response?.data?.error || "Sorry, I am having trouble connecting to the server.";
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", content: errorMessage },
+      ]);
+      setIsLoading(false);
     }
   };
 

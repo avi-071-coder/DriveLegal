@@ -11,6 +11,18 @@ const genAI = new GoogleGenerativeAI(
   process.env.GEMINI_API_KEY
 );
 
+// Helper function to strictly remove markdown formatting (bold asterisks, hashes, backticks)
+// while keeping simple structured lists (replacing asterisk bullets with dashes)
+function cleanResponse(text) {
+  if (!text) return "";
+  return text
+    .replace(/^\s*\*\s+/gm, "- ") // Convert asterisk bullets to dash bullets
+    .replace(/\*/g, "")           // Remove bold/italic asterisks
+    .replace(/#/g, "")           // Remove header hashes
+    .replace(/`/g, "")           // Remove backticks
+    .trim();
+}
+
 router.post("/chat", async (req, res) => {
   try {
     const { message } = req.body;
@@ -28,13 +40,25 @@ router.post("/chat", async (req, res) => {
       model: "gemini-flash-latest",
     });
 
-    const result = await model.generateContent(
-      `You are a concise yet detailed traffic law assistant. Explain the following briefly. DO NOT use markdown formatting like asterisks (*, **, ***) or hash symbols (#) for bold, italics, or headers. Instead, use normal capitalizations, clean line spacing, and simple lists with dashes (-) for clarity. Keep your response brief and direct.
-
-      Question: ${message}`
+    // Fast-failing timeout of 3.5 seconds to instantly fall back if Gemini hangs
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Gemini API connection timeout")), 3500)
     );
 
-    const reply = result.response.text();
+    const result = await Promise.race([
+      model.generateContent(
+        `You are a concise, structured traffic law assistant. Provide a structured, proper, and highly concise response. 
+        - Use simple lists with dashes (-).
+        - Use normal capitalizations for headers.
+        - DO NOT use markdown symbols like asterisks (*) or hash signs (#).
+        - Keep your answer brief and directly to the point.
+
+        Question: ${message}`
+      ),
+      timeoutPromise
+    ]);
+
+    const reply = cleanResponse(result.response.text());
 
     res.json({ reply });
   } catch (error) {
@@ -52,7 +76,7 @@ router.post("/chat", async (req, res) => {
           messages: [
             {
               role: "system",
-              content: "You are a concise yet detailed traffic law assistant. Explain things briefly. DO NOT use markdown formatting like asterisks (*, **, ***) or hash symbols (#) for bold, italics, or headers. Instead, use normal capitalizations, clean line spacing, and simple lists with dashes (-) for clarity. Keep your response brief and direct."
+              content: "You are a concise, structured traffic law assistant. Provide a structured, proper, and highly concise response. Use simple lists with dashes (-). Use normal capitalizations for headers. DO NOT use markdown symbols like asterisks (*) or hash signs (#). Keep your answer brief and directly to the point."
             },
             {
               role: "user",
@@ -68,7 +92,7 @@ router.post("/chat", async (req, res) => {
         }
       );
 
-      const reply = openRouterResponse.data.choices[0].message.content;
+      const reply = cleanResponse(openRouterResponse.data.choices[0].message.content);
       return res.json({ reply });
       
     } catch (fallbackError) {
