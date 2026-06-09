@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 
 const router = express.Router();
 
@@ -28,18 +29,54 @@ router.post("/chat", async (req, res) => {
     });
 
     const result = await model.generateContent(
-      `You are a traffic law assistant.
-      ${message}`
+      `You are a concise yet detailed traffic law assistant. Explain the following briefly. DO NOT use markdown formatting like asterisks (*, **, ***) or hash symbols (#) for bold, italics, or headers. Instead, use normal capitalizations, clean line spacing, and simple lists with dashes (-) for clarity. Keep your response brief and direct.
+
+      Question: ${message}`
     );
 
-    const response = result.response.text();
+    const reply = result.response.text();
 
-    res.json({ response });
+    res.json({ reply });
   } catch (error) {
-    console.error("Chat Error:", error);
-    res.status(500).json({
-      error: "An error occurred while communicating with the AI.",
-    });
+    console.error("Gemini Error, falling back to OpenRouter:", error.message);
+    
+    if (!process.env.OPENROUTER_API_KEY) {
+      return res.status(503).json({ error: "Gemini is busy and OpenRouter fallback is unavailable (Missing API Key). Please add OPENROUTER_API_KEY to your .env file." });
+    }
+
+    try {
+      const openRouterResponse = await axios.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          model: "openrouter/free",
+          messages: [
+            {
+              role: "system",
+              content: "You are a concise yet detailed traffic law assistant. Explain things briefly. DO NOT use markdown formatting like asterisks (*, **, ***) or hash symbols (#) for bold, italics, or headers. Instead, use normal capitalizations, clean line spacing, and simple lists with dashes (-) for clarity. Keep your response brief and direct."
+            },
+            {
+              role: "user",
+              content: req.body.message
+            }
+          ]
+        },
+        {
+          headers: {
+            "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      const reply = openRouterResponse.data.choices[0].message.content;
+      return res.json({ reply });
+      
+    } catch (fallbackError) {
+      console.error("OpenRouter Fallback Error Details:", fallbackError.response?.data || fallbackError.message);
+      return res.status(500).json({
+        error: "Both Gemini and OpenRouter AI services are currently unavailable. Please try again later.",
+      });
+    }
   }
 });
 
