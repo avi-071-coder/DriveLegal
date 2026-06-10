@@ -886,42 +886,58 @@ function CodexPage() {
             grid-template-columns: 1fr;
             min-height: auto;
             border-radius: 16px;
+            width: 100%;
+            overflow: hidden;
           }
           .dashboard-sidebar {
             border-right: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             max-height: none;
+            width: 100%;
+            overflow: hidden;
+            box-sizing: border-box;
           }
           .sidebar-search-box {
             padding: 12px 16px;
+            width: 100%;
+            box-sizing: border-box;
           }
           .sidebar-items-list {
+            display: flex;
             flex-direction: row;
+            flex-wrap: nowrap;
             overflow-x: auto;
             overflow-y: hidden;
             max-height: none;
             height: auto;
             padding: 0 16px 12px;
             gap: 8px;
+            width: 100%;
+            box-sizing: border-box;
             -webkit-overflow-scrolling: touch;
           }
           .sidebar-items-list::-webkit-scrollbar {
             height: 3px;
           }
           .item-row-card {
+            flex: 0 0 auto;
             min-width: 130px;
-            padding: 10px 12px;
+            padding: 10px 14px;
             height: 48px;
             justify-content: center;
             align-items: center;
-            flex-shrink: 0;
+            box-sizing: border-box;
           }
           .item-row-header {
             gap: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
           .item-row-tag {
             font-size: 0.6rem;
             padding: 1px 4px;
+            flex-shrink: 0;
           }
           .item-row-title {
             font-size: 0.78rem;
@@ -932,10 +948,14 @@ function CodexPage() {
           }
           .dashboard-detail-view {
             padding: 16px;
+            width: 100%;
+            box-sizing: border-box;
           }
           .details-hero-card {
             padding: 16px;
             gap: 16px;
+            width: 100%;
+            box-sizing: border-box;
           }
           .details-title {
             font-size: 1.15rem;
@@ -953,6 +973,8 @@ function CodexPage() {
           .visual-display-sec {
             min-height: 180px;
             padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
           }
         }
       `}</style>
