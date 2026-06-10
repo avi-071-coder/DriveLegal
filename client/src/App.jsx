@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import ChatbotPage from "./pages/ChatbotPage";
 import CalculatorPage from "./pages/CalculatorPage";
 import OCRPage from "./pages/OCRPage";
+import CodexPage from "./pages/CodexPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/chatbot" element={<ChatbotPage />} />
           <Route path="/calculator" element={<CalculatorPage />} />
           <Route path="/ocr" element={<OCRPage />} />
+          <Route path="/codex" element={<CodexPage />} />
         </Routes>
       </BrowserRouter>
     </>

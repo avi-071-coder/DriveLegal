@@ -1,17 +1,21 @@
 import Tesseract from "tesseract.js";
 import { useState, useRef } from "react";
-import { Upload, Car, Calendar, Receipt, IndianRupee, ScanLine, FileCheck2 } from "lucide-react";
+import { Upload, Car, Calendar, Receipt, IndianRupee, ScanLine, FileCheck2, Camera, Image, X } from "lucide-react";
 
 function OCRScanner() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const [showSourceSelector, setShowSourceSelector] = useState(false);
+  
   const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
 
   const handleImage = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    setShowSourceSelector(false);
     setIsProcessing(true);
     setProgress(0);
     setShowResults(false);
@@ -40,12 +44,24 @@ function OCRScanner() {
     }
   };
 
+  const handleZoneClick = () => {
+    if (isProcessing) return;
+    
+    // Check if viewport is mobile/tablet size
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      setShowSourceSelector(true);
+    } else {
+      fileInputRef.current?.click();
+    }
+  };
+
   return (
     <div className="grid-responsive" style={{ gap: '40px' }}>
       
       {/* Upload Zone */}
       <div 
-        onClick={() => !isProcessing && fileInputRef.current?.click()}
+        onClick={handleZoneClick}
         style={{
           border: '2px dashed rgba(16, 185, 129, 0.4)',
           borderRadius: 'var(--radius-xl)',
@@ -64,7 +80,9 @@ function OCRScanner() {
         onMouseOver={e => !isProcessing && (e.currentTarget.style.borderColor = 'var(--accent-neon)', e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 245, 212, 0.1) inset')}
         onMouseOut={e => !isProcessing && (e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.4)', e.currentTarget.style.boxShadow = 'none')}
       >
+        {/* Hidden inputs: One for regular gallery file browse, one with capture environment for phone camera */}
         <input type="file" accept="image/*" onChange={handleImage} ref={fileInputRef} style={{ display: 'none' }} />
+        <input type="file" accept="image/*" capture="environment" onChange={handleImage} ref={cameraInputRef} style={{ display: 'none' }} />
         
         {isProcessing ? (
           <div style={{ textAlign: 'center', zIndex: 10 }}>
@@ -83,8 +101,8 @@ function OCRScanner() {
             <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '24px', borderRadius: '50%', marginBottom: '24px', display: 'inline-block', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
               <Upload size={48} color="var(--accent-emerald)" />
             </div>
-            <h3 className="title-md" style={{ color: 'white', marginBottom: '12px' }}>Upload your Challan Photo</h3>
-            <p className="text-body" style={{ maxWidth: '300px', margin: '0 auto' }}>Drop your physical challan or digital screenshot here to extract structured data instantly.</p>
+            <h3 className="title-md" style={{ color: 'white', marginBottom: '12px' }}>Scan your Challan</h3>
+            <p className="text-body" style={{ maxWidth: '300px', margin: '0 auto' }}>Tap here to take a photo of your physical challan or upload a screenshot to extract details instantly.</p>
           </div>
         )}
       </div>
@@ -141,10 +159,115 @@ function OCRScanner() {
         ) : (
           <div className="glass-card flex-center" style={{ minHeight: '300px', flexDirection: 'column', gap: '16px' }}>
             <ScanLine size={48} color="rgba(255,255,255,0.1)" />
-            <p className="text-body text-center" style={{ color: 'rgba(255,255,255,0.3)' }}>No document scanned yet.<br/>Upload an image to see details here.</p>
+            <p className="text-body text-center" style={{ color: 'rgba(255,255,255,0.3)' }}>No document scanned yet.<br/>Upload or capture an image to see details here.</p>
           </div>
         )}
       </div>
+
+      {/* Source Selector Drawer for Mobile */}
+      {showSourceSelector && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(2, 4, 8, 0.82)',
+          backdropFilter: 'blur(12px)',
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+          zIndex: 99999,
+          animation: 'fadeIn 0.2s ease-out'
+        }} onClick={() => setShowSourceSelector(false)}>
+          <div style={{
+            width: '100%',
+            maxWidth: '500px',
+            background: 'rgba(15, 23, 42, 0.95)',
+            borderTop: '1px solid rgba(16, 185, 129, 0.3)',
+            borderRadius: '24px 24px 0 0',
+            padding: '24px 24px 40px',
+            boxShadow: '0 -15px 40px rgba(0, 0, 0, 0.6)',
+            animation: 'slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <h4 style={{ margin: 0, color: 'white', fontSize: '1.1rem', fontWeight: 700, fontFamily: 'inherit', letterSpacing: '0.3px' }}>Select Image Source</h4>
+              <button 
+                onClick={() => setShowSourceSelector(false)} 
+                style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <button 
+              onClick={() => {
+                fileInputRef.current?.click();
+                setShowSourceSelector(false);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                width: '100%',
+                padding: '16px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '16px',
+                color: 'white',
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                textAlign: 'left',
+                cursor: 'pointer',
+                transition: 'background 0.2s'
+              }}
+              onMouseOver={e => e.currentTarget.style.background = 'rgba(16, 185, 129, 0.1)'}
+              onMouseOut={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'}
+            >
+              <div style={{ background: 'rgba(16, 185, 129, 0.15)', padding: '10px', borderRadius: '12px' }}>
+                <Image size={20} color="var(--accent-emerald)" />
+              </div>
+              <div>
+                <div style={{ fontWeight: 700 }}>Upload from Gallery</div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px', fontWeight: 400 }}>Choose an existing challan photo</div>
+              </div>
+            </button>
+
+            <button 
+              onClick={() => {
+                cameraInputRef.current?.click();
+                setShowSourceSelector(false);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                width: '100%',
+                padding: '16px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '16px',
+                color: 'white',
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                textAlign: 'left',
+                cursor: 'pointer',
+                transition: 'background 0.2s'
+              }}
+              onMouseOver={e => e.currentTarget.style.background = 'rgba(0, 245, 212, 0.1)'}
+              onMouseOut={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'}
+            >
+              <div style={{ background: 'rgba(0, 245, 212, 0.15)', padding: '10px', borderRadius: '12px' }}>
+                <Camera size={20} color="var(--accent-neon)" />
+              </div>
+              <div>
+                <div style={{ fontWeight: 700 }}>Take Photo</div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px', fontWeight: 400 }}>Use camera to scan physical challan</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes scan {
@@ -155,6 +278,15 @@ function OCRScanner() {
         }
         .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+
+        @keyframes slideUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
       `}</style>
     </div>
   );

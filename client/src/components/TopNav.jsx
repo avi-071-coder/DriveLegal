@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Calculator, ScanLine, Bot, Home } from "lucide-react";
+import { Calculator, ScanLine, Bot, Home, BookOpen } from "lucide-react";
 
 function TopNav() {
   const location = useLocation();
@@ -29,6 +29,9 @@ function TopNav() {
       </Link>
       <Link to="/chatbot" title="AI Chat" style={{ padding: '8px', borderRadius: '50%', transition: '0.3s', background: currentPath === '/chatbot' ? 'rgba(16, 185, 129, 0.1)' : 'transparent', color: currentPath === '/chatbot' ? 'var(--accent-emerald)' : 'var(--text-muted)' }}>
         <Bot size={20} />
+      </Link>
+      <Link to="/codex" title="Codex" style={{ padding: '8px', borderRadius: '50%', transition: '0.3s', background: currentPath === '/codex' ? 'rgba(16, 185, 129, 0.1)' : 'transparent', color: currentPath === '/codex' ? 'var(--accent-emerald)' : 'var(--text-muted)' }}>
+        <BookOpen size={20} />
       </Link>
     </div>
   );
