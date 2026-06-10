@@ -887,7 +887,7 @@ function CodexPage() {
             min-height: auto;
             border-radius: 16px;
             width: 100%;
-            overflow: hidden;
+            overflow: visible;
           }
           .dashboard-sidebar {
             border-right: none;
@@ -950,6 +950,7 @@ function CodexPage() {
             padding: 16px;
             width: 100%;
             box-sizing: border-box;
+            overflow: visible;
           }
           .details-hero-card {
             padding: 16px;
