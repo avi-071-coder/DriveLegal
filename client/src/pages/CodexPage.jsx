@@ -863,25 +863,96 @@ function CodexPage() {
         }
 
         @media (max-width: 768px) {
+          .codex-tabs-bar {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            justify-content: flex-start;
+            padding: 4px;
+            gap: 6px;
+            border-radius: 12px;
+            margin: 0 16px 20px;
+            -webkit-overflow-scrolling: touch;
+          }
+          .codex-tabs-bar::-webkit-scrollbar {
+            display: none;
+          }
+          .codex-tab-btn {
+            padding: 8px 14px;
+            font-size: 0.76rem;
+            flex: 0 0 auto;
+          }
+
           .dashboard-glass-panel {
             grid-template-columns: 1fr;
+            min-height: auto;
+            border-radius: 16px;
           }
           .dashboard-sidebar {
             border-right: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            max-height: 230px;
+            max-height: none;
+          }
+          .sidebar-search-box {
+            padding: 12px 16px;
           }
           .sidebar-items-list {
             flex-direction: row;
             overflow-x: auto;
             overflow-y: hidden;
             max-height: none;
-            height: 90px;
+            height: auto;
+            padding: 0 16px 12px;
+            gap: 8px;
+            -webkit-overflow-scrolling: touch;
+          }
+          .sidebar-items-list::-webkit-scrollbar {
+            height: 3px;
           }
           .item-row-card {
-            min-width: 150px;
-            height: auto;
+            min-width: 130px;
+            padding: 10px 12px;
+            height: 48px;
             justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+          }
+          .item-row-header {
+            gap: 6px;
+          }
+          .item-row-tag {
+            font-size: 0.6rem;
+            padding: 1px 4px;
+          }
+          .item-row-title {
+            font-size: 0.78rem;
+            white-space: nowrap;
+          }
+          .item-row-desc {
+            display: none; /* Hide descriptions in the list on phone to keep selector elegant */
+          }
+          .dashboard-detail-view {
+            padding: 16px;
+          }
+          .details-hero-card {
+            padding: 16px;
+            gap: 16px;
+          }
+          .details-title {
+            font-size: 1.15rem;
+          }
+          .details-desc {
+            font-size: 0.78rem;
+            line-height: 1.5;
+          }
+          .details-sec-title {
+            font-size: 0.78rem;
+          }
+          .details-list-item {
+            font-size: 0.76rem;
+          }
+          .visual-display-sec {
+            min-height: 180px;
+            padding: 10px;
           }
         }
       `}</style>

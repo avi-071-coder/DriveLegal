@@ -19,7 +19,6 @@ An ultra-premium, AI-powered traffic law assistant providing localized challan c
   - Custom vector animations (e.g., roundabout right-of-way motion simulator, spinning global standard network map).
   - High-fidelity custom illustration background cards mapped uniquely to each guideline.
   - Standardized `.page-header` layout and radial-masked background watermarks (`codex_bg.jpg`) for perfect interface consistency.
-- **Officer Safety Broadcast:** A premium fixed glassmorphic video modal overlay accessible directly from the Hero section to broadcast official PSA safety rules.
 
 ---
 
@@ -27,27 +26,6 @@ An ultra-premium, AI-powered traffic law assistant providing localized challan c
 - **Frontend:** React, Vite, Tailwind CSS (Core layouts), Custom CSS Design System (Premium Glassmorphism & custom variables).
 - **Backend:** Node.js, Express, Mongoose (MongoDB).
 - **AI Integration:** Google Gemini API (`gemini-flash-latest`), OpenRouter API (`openrouter/free` fallback), Tesseract.js (On-device OCR).
-
----
-
-## Project Directory Structure
-
-```
-├── client/                  # Frontend Vite-React App
-│   ├── public/              # Static assets, icons, and page watermarks
-│   └── src/
-│       ├── api/             # API client base configurations
-│       ├── components/      # Key features (Calculator, ChatBox, OCRScanner, TopNav)
-│       ├── pages/           # Page layouts (Home, ChatbotPage, CalculatorPage, OCRPage)
-│       └── index.css        # Global CSS variables, scrollbars, and animations
-│
-└── server/                  # Backend Express Server
-    ├── data/                # Database seed JSON data files
-    ├── models/              # Mongoose schemas (Law.js)
-    ├── routes/              # Express Router files (chatRoutes, calculatorRoutes, lawRoutes)
-    ├── index.js             # Main server execution
-    └── seed.js              # Database seeder utility
-```
 
 ---
 
@@ -102,11 +80,4 @@ An ultra-premium, AI-powered traffic law assistant providing localized challan c
    npm run dev
    ```
 
----
 
-## Cleanup and Optimizations
-This repository has been fully audited to maintain maximum efficiency:
-- Removed all legacy pages and unused component trees.
-- Cleaned up redundant public directory images.
-- Implemented `Promise.race` on the server-side to skip unresponsive primary AI endpoints within 3.5 seconds.
-- Eliminated artificial frontend render delays to enable instant message display.

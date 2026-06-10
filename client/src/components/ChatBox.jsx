@@ -45,58 +45,58 @@ function ChatBox() {
   };
 
   return (
-    <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '0', overflow: 'hidden' }}>
+    <div className="glass-card chat-container">
       
       {/* Messages Area */}
-      <div style={{ flexGrow: 1, overflowY: 'auto', padding: '32px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div className="chat-messages-area">
         {messages.map((msg, index) => (
-          <div key={index} className="animate-fade-in-up" style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '80%' }}>
+          <div key={index} className={`animate-fade-in-up chat-message-row ${msg.role === 'user' ? 'user' : 'bot'}`}>
             
             {msg.role === 'bot' && (
-              <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <div className="chat-bot-inner">
                 <div style={{ position: 'relative' }}>
-                  <img src="/traffic_police_ai.png" alt="AI Avatar" className="animate-breathe" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(0, 245, 212, 0.4)', background: 'rgba(0,0,0,0.5)' }} />
-                  <div style={{ position: 'absolute', bottom: '0', right: '0', width: '12px', height: '12px', background: 'var(--accent-neon)', borderRadius: '50%', border: '2px solid var(--bg-tertiary)', boxShadow: '0 0 10px var(--accent-neon)' }}></div>
+                  <img src="/traffic_police_ai.png" alt="AI Avatar" className="animate-breathe chat-avatar" />
+                  <div className="chat-avatar-status"></div>
                 </div>
                 
                 {/* Complex Bot Card */}
-                <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '20px', borderRadius: '20px', borderTopLeftRadius: '4px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+                <div className="chat-message-bubble">
                   {msg.content.toLowerCase().includes("section 127") ? (
                     <div>
-                      <h4 style={{ fontSize: '1.1rem', marginBottom: '12px', fontWeight: 'bold', color: 'var(--text-primary)' }}>Section 127 MV Act Explained</h4>
-                      <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.6, whiteSpace: 'pre-line' }}>
+                      <h4 style={{ fontSize: '1rem', marginBottom: '12px', fontWeight: 'bold', color: 'var(--text-primary)' }}>Section 127 MV Act Explained</h4>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.6, whiteSpace: 'pre-line' }}>
                         {msg.content}
                       </p>
                       
                       <div style={{ background: 'rgba(16, 185, 129, 0.05)', borderLeft: '3px solid var(--accent-emerald)', padding: '16px', borderRadius: '0 8px 8px 0', marginBottom: '20px' }}>
-                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.9rem', color: 'var(--text-primary)' }}>
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.8rem', color: 'var(--text-primary)' }}>
                           <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                            <CheckCircle2 size={18} color="var(--accent-emerald)" /> <span>Key points and violation impact</span>
+                            <CheckCircle2 size={16} color="var(--accent-emerald)" /> <span>Key points and violation impact</span>
                           </li>
                           <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                            <CheckCircle2 size={18} color="var(--accent-emerald)" /> <span>Required documentation proof</span>
+                            <CheckCircle2 size={16} color="var(--accent-emerald)" /> <span>Required documentation proof</span>
                           </li>
                           <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <CheckCircle2 size={18} color="var(--accent-emerald)" /> <span>Options for challenging the fine</span>
+                            <CheckCircle2 size={16} color="var(--accent-emerald)" /> <span>Options for challenging the fine</span>
                           </li>
                         </ul>
                       </div>
 
                       {/* Embedded Generated Asset */}
                       <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: '12px', left: '12px', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)', padding: '4px 10px', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 'bold', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }}>REFERENCE IMAGE</div>
-                        <img src="/car_towed_asset.png" alt="Towed car" style={{ width: '100%', display: 'block', maxHeight: '200px', objectFit: 'cover' }} />
+                        <div style={{ position: 'absolute', top: '12px', left: '12px', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)', padding: '4px 10px', borderRadius: '100px', fontSize: '0.65rem', fontWeight: 'bold', color: 'white', border: '1px solid rgba(255,255,255,0.2)' }}>REFERENCE IMAGE</div>
+                        <img src="/car_towed_asset.png" alt="Towed car" style={{ width: '100%', display: 'block', maxHeight: '160px', objectFit: 'cover' }} />
                       </div>
                     </div>
                   ) : (
-                    <p style={{ fontSize: '1rem', lineHeight: 1.6, color: 'var(--text-primary)', whiteSpace: 'pre-line' }}>{msg.content}</p>
+                    <p style={{ fontSize: '0.92rem', lineHeight: 1.6, color: 'var(--text-primary)', whiteSpace: 'pre-line' }}>{msg.content}</p>
                   )}
                 </div>
               </div>
             )}
 
             {msg.role === 'user' && (
-              <div style={{ background: 'var(--gradient-glow)', color: '#000', padding: '16px 20px', borderRadius: '20px', borderBottomRightRadius: '4px', fontSize: '1rem', fontWeight: '500', boxShadow: '0 10px 20px rgba(16, 185, 129, 0.2)' }}>
+              <div className="chat-user-bubble">
                 {msg.content}
               </div>
             )}
@@ -105,12 +105,16 @@ function ChatBox() {
         ))}
 
         {isLoading && (
-          <div className="animate-fade-in-up" style={{ alignSelf: 'flex-start', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-            <img src="/traffic_police_ai.png" alt="AI Avatar" className="animate-breathe" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(0, 245, 212, 0.4)' }} />
-            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '20px', borderRadius: '20px', borderTopLeftRadius: '4px', display: 'flex', gap: '6px', alignItems: 'center', height: '64px' }}>
-              <span className="dot-pulse" style={{ width: '8px', height: '8px', background: 'var(--accent-neon)', borderRadius: '50%' }}></span>
-              <span className="dot-pulse delay-1" style={{ width: '8px', height: '8px', background: 'var(--accent-neon)', borderRadius: '50%' }}></span>
-              <span className="dot-pulse delay-2" style={{ width: '8px', height: '8px', background: 'var(--accent-neon)', borderRadius: '50%' }}></span>
+          <div className="animate-fade-in-up chat-message-row bot">
+            <div className="chat-bot-inner">
+              <div style={{ position: 'relative' }}>
+                <img src="/traffic_police_ai.png" alt="AI Avatar" className="animate-breathe chat-avatar" />
+              </div>
+              <div className="chat-message-bubble" style={{ display: 'flex', gap: '6px', alignItems: 'center', height: '54px', padding: '0 20px' }}>
+                <span className="dot-pulse" style={{ width: '6px', height: '6px', background: 'var(--accent-neon)', borderRadius: '50%' }}></span>
+                <span className="dot-pulse delay-1" style={{ width: '6px', height: '6px', background: 'var(--accent-neon)', borderRadius: '50%' }}></span>
+                <span className="dot-pulse delay-2" style={{ width: '6px', height: '6px', background: 'var(--accent-neon)', borderRadius: '50%' }}></span>
+              </div>
             </div>
           </div>
         )}
@@ -118,28 +122,119 @@ function ChatBox() {
       </div>
 
       {/* Input Area */}
-      <div style={{ padding: '24px 32px', background: 'rgba(0,0,0,0.3)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '100px', padding: '8px 8px 8px 24px', transition: 'all 0.3s' }}>
+      <div className="chat-input-area">
+        <div className="chat-input-pill">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && sendMessage()}
             placeholder="Type a legal question or describe your issue..."
-            style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', background: 'transparent', color: 'white' }}
+            style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.95rem', background: 'transparent', color: 'white' }}
           />
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '12px', color: 'var(--text-muted)', borderRadius: '50%', transition: '0.3s' }} onMouseOver={e => e.currentTarget.style.color='white'} onMouseOut={e => e.currentTarget.style.color='var(--text-muted)'}>
-              <Mic size={22} />
+            <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px', color: 'var(--text-muted)', borderRadius: '50%', transition: '0.3s' }} onMouseOver={e => e.currentTarget.style.color='white'} onMouseOut={e => e.currentTarget.style.color='var(--text-muted)'}>
+              <Mic size={20} />
             </button>
-            <button onClick={sendMessage} className="btn-primary" style={{ width: '48px', height: '48px', padding: 0, borderRadius: '50%', cursor: 'pointer' }}>
-              <Send size={20} style={{ marginLeft: '-2px' }} />
+            <button onClick={sendMessage} className="btn-primary" style={{ width: '40px', height: '40px', padding: 0, borderRadius: '50%', cursor: 'pointer' }}>
+              <Send size={16} style={{ marginLeft: '-1px' }} />
             </button>
           </div>
         </div>
       </div>
       
       <style>{`
+        .chat-container {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          padding: 0;
+          overflow: hidden;
+        }
+
+        .chat-messages-area {
+          flex-grow: 1;
+          overflow-y: auto;
+          padding: 32px;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+
+        .chat-message-row {
+          max-width: 80%;
+          display: flex;
+        }
+        .chat-message-row.user {
+          align-self: flex-end;
+        }
+        .chat-message-row.bot {
+          align-self: flex-start;
+        }
+
+        .chat-bot-inner {
+          display: flex;
+          gap: 16px;
+          align-items: flex-start;
+        }
+
+        .chat-avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid rgba(0, 245, 212, 0.4);
+          background: rgba(0,0,0,0.5);
+        }
+
+        .chat-avatar-status {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 12px;
+          height: 12px;
+          background: var(--accent-neon);
+          border-radius: 50%;
+          border: 2px solid var(--bg-tertiary);
+          box-shadow: 0 0 10px var(--accent-neon);
+        }
+
+        .chat-message-bubble {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          padding: 20px;
+          border-radius: 20px;
+          border-top-left-radius: 4px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .chat-user-bubble {
+          background: var(--gradient-glow);
+          color: #000;
+          padding: 16px 20px;
+          border-radius: 20px;
+          border-bottom-right-radius: 4px;
+          font-size: 0.95rem;
+          font-weight: 500;
+          box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .chat-input-area {
+          padding: 24px 32px;
+          background: rgba(0,0,0,0.3);
+          border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .chat-input-pill {
+          display: flex;
+          align-items: center;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 100px;
+          padding: 8px 8px 8px 24px;
+          transition: all 0.3s;
+        }
+
         .dot-pulse { animation: pulseBounce 1s infinite alternate; }
         .delay-1 { animation-delay: 0.2s; }
         .delay-2 { animation-delay: 0.4s; }
@@ -149,6 +244,46 @@ function ChatBox() {
         @keyframes breathe {
           0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 5px rgba(0,245,212,0.3)); }
           50% { transform: translateY(-4px) scale(1.05); filter: drop-shadow(0 0 15px rgba(0,245,212,0.6)); }
+        }
+
+        /* Mobile Viewport Optimizations */
+        @media (max-width: 768px) {
+          .chat-messages-area {
+            padding: 16px;
+            gap: 16px;
+          }
+          .chat-message-row {
+            max-width: 95%;
+          }
+          .chat-bot-inner {
+            gap: 10px;
+          }
+          .chat-avatar {
+            width: 36px;
+            height: 36px;
+          }
+          .chat-avatar-status {
+            width: 9px;
+            height: 9px;
+            border-width: 1px;
+          }
+          .chat-message-bubble {
+            padding: 14px;
+            border-radius: 16px;
+            border-top-left-radius: 4px;
+          }
+          .chat-user-bubble {
+            padding: 12px 16px;
+            font-size: 0.88rem;
+            border-radius: 16px;
+            border-bottom-right-radius: 4px;
+          }
+          .chat-input-area {
+            padding: 12px 16px;
+          }
+          .chat-input-pill {
+            padding: 6px 6px 6px 16px;
+          }
         }
       `}</style>
     </div>
