@@ -1,83 +1,121 @@
 # DriveLegal AI
 
-An ultra-premium, AI-powered traffic law assistant providing localized challan calculations, document OCR scanning, and interactive legal guidance.
-
----
+DriveLegal AI is an AI-powered traffic law assistant that helps users understand traffic regulations, calculate fines, scan challans, and get legal guidance through a conversational interface.
 
 ## Overview
-**DriveLegal AI** simplifies traffic law lookup by combining local regulations with state-of-the-art AI. Built with a sleek, dark-themed, glassmorphic design language featuring cobalt blue, neon cyan, and indigo accents. The app offers a geo-fenced fine calculator, intelligent OCR scanner, and a highly responsive AI Legal Assistant with an automatic fast fallback system.
 
----
+The application combines traffic law information, OCR-based document scanning, and AI-powered assistance into a single platform. Users can calculate challans based on state-specific rules, extract information from uploaded documents, and ask traffic-law-related questions in natural language.
 
-## Key Features
-- **Smart Fine Calculator:** Dynamically computes traffic fines based on State, Violation type, and Vehicle Type.
-- **Auto-Location Detection:** Leverages browser geolocation to automatically detect your state and pre-filter local regulations.
-- **AI Legal Assistant:** Ask traffic law questions in plain text and get instant, structured, concise answers (with automatic post-processed plain-text rendering and a 3.5s fast-timeout fallback to OpenRouter).
-- **Challan OCR Scanner:** Instantly extract text from digital uploads or photos of physical challan papers using on-device OCR.
-  - **Take Photo (Mobile Integration):** Viewports on phones and tablets feature a bottom drawer option letting users capture physical papers instantly using the native device camera (`capture="environment"` integration) or upload from the library.
-- **Traffic Lexicon (Driver's Codex):** A unified legal dashboard mapping road safety guidelines across four categories: Basic Rules, Constitutional Laws, International Standards, and Road Signs. Features:
-  - Custom vector animations (e.g., roundabout right-of-way motion simulator, spinning global standard network map).
-  - High-fidelity custom illustration background cards mapped uniquely to each guideline.
-  - Standardized `.page-header` layout and radial-masked background watermarks (`codex_bg.jpg`) for perfect interface consistency.
+## Features
 
----
+### Fine Calculator
+
+* Calculate traffic fines based on:
+
+  * State
+  * Violation type
+  * Vehicle category
+* Uses state-specific traffic law data for accurate results.
+
+### Location Detection
+
+* Detects the user's location through browser geolocation.
+* Automatically selects the relevant state for fine calculations and legal information.
+
+### AI Legal Assistant
+
+* Answers traffic-law-related questions in natural language.
+* Provides concise and structured responses.
+* Includes automatic fallback support through OpenRouter if the primary AI service is unavailable.
+
+### Challan OCR Scanner
+
+* Extracts text from uploaded challan documents and images.
+* Supports both gallery uploads and camera capture on mobile devices.
+* Uses on-device OCR processing with Tesseract.js.
+
+### Traffic Lexicon
+
+A centralized reference section containing:
+
+* Basic traffic rules
+* Important legal provisions
+* International road safety standards
+* Road sign explanations
 
 ## Tech Stack
-- **Frontend:** React, Vite, Tailwind CSS (Core layouts), Custom CSS Design System (Premium Glassmorphism & custom variables).
-- **Backend:** Node.js, Express, Mongoose (MongoDB).
-- **AI Integration:** Google Gemini API (`gemini-flash-latest`), OpenRouter API (`openrouter/free` fallback), Tesseract.js (On-device OCR).
 
----
+### Frontend
 
-## Getting Started
+* React
+* Vite
+* Tailwind CSS
 
-### Prerequisites
-- Node.js (v18+)
-- MongoDB Database (Local instance or Atlas URI)
-- Google Gemini API Key
-- OpenRouter API Key (Optional fallback)
+### Backend
 
----
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
 
-## Installation and Run
+### AI & OCR
 
-### 1. Setup Backend
-1. Navigate to the server folder:
-   ```bash
-   cd server
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file in the `server` directory and add your keys:
-   ```env
-   PORT=5000
-   MONGO_URI=your_mongodb_uri
-   GEMINI_API_KEY=your_gemini_api_key
-   OPENROUTER_API_KEY=your_openrouter_api_key_here
-   ```
-4. Seed the database with local laws:
-   ```bash
-   node seed.js
-   ```
-5. Start the backend:
-   ```bash
-   npm run dev
-   ```
+* Google Gemini API
+* OpenRouter (Fallback)
+* Tesseract.js
 
-### 2. Setup Frontend
-1. Navigate to the client folder:
-   ```bash
-   cd client
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
+## Prerequisites
 
+* Node.js (v18 or higher)
+* MongoDB instance or MongoDB Atlas
+* Google Gemini API Key
+* OpenRouter API Key (optional)
 
+## Installation
+
+### Backend Setup
+
+```bash
+cd server
+npm install
+```
+
+Create a `.env` file:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_uri
+GEMINI_API_KEY=your_gemini_api_key
+OPENROUTER_API_KEY=your_openrouter_api_key
+```
+
+Seed the database:
+
+```bash
+node seed.js
+```
+
+Start the backend:
+
+```bash
+npm run dev
+```
+
+### Frontend Setup
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+## Future Improvements
+
+* Support for additional regional traffic regulations
+* Multilingual legal assistance
+* Voice-based interaction
+* Challan history tracking
+* User authentication and saved reports
+
+```
+```
