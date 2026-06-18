@@ -12,6 +12,7 @@ function ChatBox() {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -21,6 +22,31 @@ function ChatBox() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const startVoiceRecognition = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Your browser does not support voice recognition.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsRecording(true);
+    recognition.onresult = (event) => {
+      const speechResult = event.results[0][0].transcript;
+      setInput(prev => prev + (prev ? " " : "") + speechResult);
+    };
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error", event.error);
+      setIsRecording(false);
+    };
+    recognition.onend = () => setIsRecording(false);
+    
+    recognition.start();
+  };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -187,7 +213,10 @@ function ChatBox() {
             }}
           />
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px', color: '#A1A1AA', transition: '0.3s' }}>
+            <button 
+              onClick={startVoiceRecognition}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px', color: isRecording ? '#ef4444' : '#A1A1AA', transition: '0.3s' }}
+            >
               <Mic size={20} />
             </button>
             <button onClick={sendMessage} style={{ 
