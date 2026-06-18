@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import TopNav from "../components/TopNav";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Calculator, 
   ScanLine, 
@@ -537,7 +537,7 @@ function CodexPage() {
   };
 
   return (
-    <div className="app-container animate-fade-in-up" style={{ paddingBottom: '60px', position: 'relative' }}>
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="app-container" style={{ paddingBottom: '60px', paddingTop: '40px', position: 'relative', minHeight: '100vh' }}>
       { poppinsFontImport && <style>{poppinsFontImport}</style> }
       
       {/* Blended Background Watermark */}
@@ -558,432 +558,52 @@ function CodexPage() {
       }}></div>
 
       <style>{`
-        /* Categories Bar */
-        .codex-tabs-bar {
-          display: flex;
-          justify-content: center;
-          gap: 12px;
-          background: rgba(15, 23, 42, 0.4);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          padding: 6px;
-          border-radius: 100px;
-          max-width: 800px;
-          margin: 0 auto 30px;
-          backdrop-filter: blur(10px);
-        }
-        .codex-tab-btn {
-          flex: 1;
-          font-family: 'Poppins', sans-serif;
-          font-size: 0.85rem;
-          font-weight: 600;
-          color: #94a3b8;
-          background: transparent;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 100px;
-          cursor: pointer;
-          transition: all 0.3s;
-          white-space: nowrap;
-          text-align: center;
-        }
-        .codex-tab-btn.active {
-          color: #f8fafc;
-          background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(168, 85, 247, 0.2));
-          border: 1px solid rgba(168, 85, 247, 0.3);
-          box-shadow: 0 4px 15px rgba(168, 85, 247, 0.15);
-        }
-
-        /* Main Dashboard Box */
-        .dashboard-glass-panel {
-          background: rgba(15, 23, 42, 0.55);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          border-radius: 24px;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(20px);
-          display: grid;
-          grid-template-columns: 320px 1fr;
-          min-height: 580px;
-          overflow: hidden;
-        }
-
-        /* Left Sidebar section */
-        .dashboard-sidebar {
-          border-right: 1px solid rgba(255, 255, 255, 0.05);
-          display: flex;
-          flex-direction: column;
-          background: rgba(2, 4, 8, 0.15);
-        }
-        
-        .sidebar-search-box {
-          padding: 20px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .sidebar-search-pill {
-          background: rgba(2, 4, 8, 0.6);
-          border: 1px solid rgba(168, 85, 247, 0.25);
-          box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.5);
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          padding: 10px 14px;
-          gap: 10px;
-        }
-        .sidebar-search-input {
-          background: transparent;
-          border: none;
-          outline: none;
-          color: #f8fafc;
-          font-size: 0.8rem;
-          width: 100%;
-          font-family: inherit;
-        }
-        .sidebar-search-input::placeholder {
-          color: #4b5563;
-        }
-
-        /* Sidebar scroll list */
-        .sidebar-items-list {
-          flex: 1;
-          overflow-y: auto;
-          padding: 16px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          max-height: 480px;
-        }
-        .sidebar-items-list::-webkit-scrollbar {
-          width: 4px;
-        }
-        .sidebar-items-list::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-        }
-        
-        .item-row-card {
-          background: rgba(15, 23, 42, 0.3);
-          border: 1px solid rgba(255, 255, 255, 0.03);
-          border-radius: 12px;
-          padding: 12px;
-          cursor: pointer;
-          transition: all 0.3s;
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        .item-row-card:hover {
-          background: rgba(15, 23, 42, 0.6);
-          border-color: rgba(6, 182, 212, 0.25);
-        }
-        .item-row-card.active {
-          background: rgba(168, 85, 247, 0.08);
-          border-color: rgba(168, 85, 247, 0.4);
-          box-shadow: 0 0 15px rgba(168, 85, 247, 0.12);
-        }
-        .item-row-header {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        .item-row-tag {
-          font-size: 0.62rem;
-          font-weight: 700;
-          color: #a855f7;
-          background: rgba(168, 85, 247, 0.12);
-          padding: 2px 6px;
-          border-radius: 4px;
-        }
-        .item-row-title {
-          font-size: 0.82rem;
-          font-weight: 600;
-          color: #f1f5f9;
-        }
-        .item-row-desc {
-          font-size: 0.68rem;
-          color: #64748b;
-          line-height: 1.4;
-        }
-
-        /* Right Panel Detail View */
-        .dashboard-detail-view {
-          padding: 24px;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
-        .dashboard-detail-view::-webkit-scrollbar {
-          width: 4px;
-        }
-        .dashboard-detail-view::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-        }
-
-        /* Main Details Card */
-        .details-hero-card {
-          background: rgba(15, 22, 40, 0.5);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 20px;
-          padding: 24px;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 24px;
-        }
-        @media (min-width: 768px) {
-          .details-hero-card {
-            grid-template-columns: 1.2fr 1fr;
-          }
-        }
-
-        .details-info-left {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-        .details-badge-row {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-        .details-badge-tag {
-          font-size: 0.7rem;
-          font-weight: 700;
-          color: #06b6d4;
-          background: rgba(6, 182, 212, 0.12);
-          border: 1px solid rgba(6, 182, 212, 0.25);
-          padding: 3px 10px;
-          border-radius: 100px;
-          letter-spacing: 0.5px;
-        }
-        .details-title {
-          font-family: 'Poppins', sans-serif;
-          font-size: 1.35rem;
-          font-weight: 700;
-          color: #f8fafc;
-        }
-        .details-desc {
-          font-size: 0.82rem;
-          color: #cbd5e1;
-          line-height: 1.6;
-        }
-
-        .details-list-sec {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-        .details-sec-title {
-          font-size: 0.8rem;
-          font-weight: 700;
-          color: #94a3b8;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-          padding-bottom: 4px;
-          margin-bottom: 4px;
-          letter-spacing: 0.5px;
-        }
-        .details-list-item {
-          font-size: 0.78rem;
-          color: #cbd5e1;
-          display: flex;
-          align-items: flex-start;
-          gap: 8px;
-          line-height: 1.4;
-        }
-        .details-bullet-dot {
-          min-width: 6px;
-          height: 6px;
-          background: #06b6d4;
-          border-radius: 50%;
-          margin-top: 6px;
-          box-shadow: 0 0 6px #06b6d4;
-        }
-
-        .details-fine-banner {
-          margin-top: 10px;
-          padding: 12px 16px;
-          background: rgba(239, 68, 68, 0.06);
-          border: 1px dashed rgba(239, 68, 68, 0.25);
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        .details-fine-info {
-          font-size: 0.78rem;
-          color: #fca5a5;
-        }
-
-        /* Right Animation container box */
-        .visual-display-sec {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          background: rgba(2, 4, 8, 0.45);
-          border: 1px solid rgba(255, 255, 255, 0.03);
-          border-radius: 16px;
-          padding: 16px;
-          min-height: 220px;
-          position: relative;
-          overflow: hidden;
-        }
-
-        /* Animated components standard sizing */
-        .roundabout-svg {
-          width: 100%;
-          max-width: 190px;
-          height: auto;
-        }
-        .holo-globe-svg {
-          width: 100%;
-          max-width: 140px;
-          height: auto;
-          animation: spin 30s linear infinite;
-          transform-origin: center;
-        }
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-
-        /* Road Signs interactive details */
-        .road-sign-visual-box {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 12px;
-        }
-
-        /* Responsive styling */
-        @media (max-width: 1024px) {
-          .dashboard-glass-panel {
-            grid-template-columns: 280px 1fr;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .codex-tabs-bar {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            justify-content: flex-start;
-            padding: 4px;
-            gap: 6px;
-            border-radius: 12px;
-            margin: 0 16px 20px;
-            -webkit-overflow-scrolling: touch;
-          }
-          .codex-tabs-bar::-webkit-scrollbar {
-            display: none;
-          }
-          .codex-tab-btn {
-            padding: 8px 14px;
-            font-size: 0.76rem;
-            flex: 0 0 auto;
-          }
-
-          .dashboard-glass-panel {
-            grid-template-columns: 1fr;
-            min-height: auto;
-            border-radius: 16px;
-            width: 100%;
-            overflow: visible;
-          }
-          .dashboard-sidebar {
-            border-right: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            max-height: none;
-            width: 100%;
-            overflow: hidden;
-            box-sizing: border-box;
-          }
-          .sidebar-search-box {
-            padding: 12px 16px;
-            width: 100%;
-            box-sizing: border-box;
-          }
-          .sidebar-items-list {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            overflow-y: hidden;
-            max-height: none;
-            height: auto;
-            padding: 0 16px 12px;
-            gap: 8px;
-            width: 100%;
-            box-sizing: border-box;
-            -webkit-overflow-scrolling: touch;
-          }
-          .sidebar-items-list::-webkit-scrollbar {
-            height: 3px;
-          }
-          .item-row-card {
-            flex: 0 0 auto;
-            min-width: 130px;
-            padding: 10px 14px;
-            height: 48px;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-          }
-          .item-row-header {
-            gap: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-          .item-row-tag {
-            font-size: 0.6rem;
-            padding: 1px 4px;
-            flex-shrink: 0;
-          }
-          .item-row-title {
-            font-size: 0.78rem;
-            white-space: nowrap;
-          }
-          .item-row-desc {
-            display: none; /* Hide descriptions in the list on phone to keep selector elegant */
-          }
-          .dashboard-detail-view {
-            padding: 16px;
-            width: 100%;
-            box-sizing: border-box;
-            overflow: visible;
-          }
-          .details-hero-card {
-            padding: 16px;
-            gap: 16px;
-            width: 100%;
-            box-sizing: border-box;
-          }
-          .details-title {
-            font-size: 1.15rem;
-          }
-          .details-desc {
-            font-size: 0.78rem;
-            line-height: 1.5;
-          }
-          .details-sec-title {
-            font-size: 0.78rem;
-          }
-          .details-list-item {
-            font-size: 0.76rem;
-          }
-          .visual-display-sec {
-            min-height: 180px;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-          }
-        }
+        /* Deep Dark Mode Styles */
+        .codex-tabs-bar { display: flex; justify-content: center; gap: 12px; background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); padding: 6px; border-radius: 100px; max-width: 800px; margin: 0 auto 30px; backdrop-filter: blur(24px); }
+        .codex-tab-btn { flex: 1; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 600; color: #A1A1AA; background: transparent; border: none; padding: 10px 20px; border-radius: 100px; cursor: pointer; transition: all 0.3s; white-space: nowrap; text-align: center; }
+        .codex-tab-btn.active { color: #0A0A0A; background: linear-gradient(135deg, #10B981, #00FF66); border: 1px solid #10B981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        .dashboard-glass-panel { background: rgba(18, 18, 18, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05); backdrop-filter: blur(24px); display: grid; grid-template-columns: 320px 1fr; min-height: 580px; overflow: hidden; }
+        .dashboard-sidebar { border-right: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; background: rgba(10, 10, 10, 0.4); }
+        .sidebar-search-box { padding: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .sidebar-search-pill { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; display: flex; align-items: center; padding: 10px 14px; gap: 10px; transition: 0.3s; }
+        .sidebar-search-pill:focus-within { border-color: #10B981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.1); }
+        .sidebar-search-input { background: transparent; border: none; outline: none; color: #F8FAFC; font-size: 0.85rem; width: 100%; font-family: inherit; }
+        .sidebar-search-input::placeholder { color: #52525B; }
+        .sidebar-items-list { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; max-height: 480px; }
+        .sidebar-items-list::-webkit-scrollbar { width: 4px; }
+        .sidebar-items-list::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.3); border-radius: 4px; }
+        .item-row-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 12px; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; gap: 6px; }
+        .item-row-card:hover { background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2); }
+        .item-row-card.active { background: rgba(16, 185, 129, 0.1); border-color: #10B981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.1); }
+        .item-row-header { display: flex; align-items: center; gap: 8px; }
+        .item-row-tag { font-size: 0.62rem; font-weight: 700; color: #0A0A0A; background: #10B981; padding: 2px 6px; border-radius: 4px; }
+        .item-row-title { font-size: 0.85rem; font-weight: 600; color: #F8FAFC; }
+        .item-row-desc { font-size: 0.75rem; color: #A1A1AA; line-height: 1.4; }
+        .dashboard-detail-view { padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
+        .dashboard-detail-view::-webkit-scrollbar { width: 4px; }
+        .dashboard-detail-view::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.3); border-radius: 4px; }
+        .details-hero-card { background: rgba(10, 10, 10, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 24px; display: grid; grid-template-columns: 1fr; gap: 24px; }
+        @media (min-width: 768px) { .details-hero-card { grid-template-columns: 1.2fr 1fr; } }
+        .details-info-left { display: flex; flex-direction: column; gap: 16px; }
+        .details-badge-row { display: flex; align-items: center; gap: 10px; }
+        .details-badge-tag { font-size: 0.7rem; font-weight: 700; color: #0A0A0A; background: #00FF66; padding: 3px 10px; border-radius: 100px; letter-spacing: 0.5px; }
+        .details-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 700; color: #F8FAFC; }
+        .details-desc { font-size: 0.9rem; color: #A1A1AA; line-height: 1.6; }
+        .details-list-sec { display: flex; flex-direction: column; gap: 10px; }
+        .details-sec-title { font-size: 0.85rem; font-weight: 700; color: #F8FAFC; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 6px; margin-bottom: 4px; }
+        .details-list-item { font-size: 0.85rem; color: #A1A1AA; display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+        .details-bullet-dot { min-width: 6px; height: 6px; background: #10B981; border-radius: 50%; margin-top: 6px; box-shadow: 0 0 8px #10B981; }
+        .details-fine-banner { margin-top: auto; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+        .details-fine-info { font-size: 0.85rem; font-weight: 600; color: #fca5a5; line-height: 1.4; }
+        .visual-display-sec { background: rgba(255, 255, 255, 0.02); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.03); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .roundabout-svg, .holo-globe-svg { width: 100%; max-width: 250px; height: auto; }
+        .road-sign-visual-box { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; min-height: 200px; }
+        @media (max-width: 768px) { .dashboard-glass-panel { grid-template-columns: 1fr; min-height: auto; } .dashboard-sidebar { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.05); } .sidebar-items-list { max-height: 300px; } .details-hero-card { padding: 16px; } }
       `}</style>
 
       {/* Matching Global Header structure */}
       <div className="page-header" style={{ padding: '20px 0', border: 'none', marginBottom: '20px' }}>
         <h2 className="title-md" style={{ margin: 0 }}>Driver's Codex</h2>
-        <TopNav />
       </div>
 
       {/* Categories Bar */}
@@ -1018,7 +638,7 @@ function CodexPage() {
           </div>
 
           {/* Items scroll list */}
-          <div className="sidebar-items-list">
+          <div className="sidebar-items-list" data-lenis-prevent="true">
             {filteredItems.length > 0 ? (
               filteredItems.map((item) => (
                 <div
@@ -1042,7 +662,7 @@ function CodexPage() {
         </div>
 
         {/* Right Main Details Column */}
-        <div className="dashboard-detail-view">
+        <div className="dashboard-detail-view" data-lenis-prevent="true">
           
           {selectedItem ? (
             <div className="details-hero-card">
@@ -1302,7 +922,7 @@ function CodexPage() {
 
       </div>
 
-    </div>
+    </motion.div>
   );
 }
 

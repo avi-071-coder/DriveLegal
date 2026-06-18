@@ -1,35 +1,52 @@
+import { motion } from "framer-motion";
 import ChatBox from "../components/ChatBox";
-import TopNav from "../components/TopNav";
 
 function ChatbotPage() {
+  const pageVariants = {
+    initial: { opacity: 0, x: 20 },
+    in: { opacity: 1, x: 0 },
+    out: { opacity: 0, x: -20 }
+  };
+
+  const pageTransition = {
+    type: "spring",
+    stiffness: 100,
+    damping: 20
+  };
+
   return (
-    <div className="app-container animate-fade-in-up" style={{ paddingBottom: '20px', height: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-      {/* Blended Background Watermark */}
+    <motion.div 
+      initial="initial" 
+      animate="in" 
+      exit="out" 
+      variants={pageVariants} 
+      transition={pageTransition}
+      style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        position: 'relative',
+        background: 'var(--bg-primary)'
+      }}
+    >
       <div style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundImage: 'url("/chatbot_bg.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        opacity: 0.15,
+        top: 0, left: 0, right: 0, height: '30vh',
+        background: 'linear-gradient(to bottom, rgba(16, 185, 129, 0.05), transparent)',
         pointerEvents: 'none',
-        zIndex: -1,
-        maskImage: 'radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%)',
-        WebkitMaskImage: 'radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%)'
+        zIndex: 0
       }}></div>
 
-      <div className="page-header" style={{ padding: '20px 0', marginBottom: '20px', border: 'none' }}>
-        <h2 className="title-md" style={{ margin: 0 }}>AI Legal Assistant</h2>
-        <TopNav />
+      <div style={{ padding: '24px 32px', zIndex: 1 }}>
+        <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 700, color: '#F8FAFC' }}>
+          DriveLegal <span style={{ color: '#10B981' }}>AI Assistant</span>
+        </h2>
       </div>
 
-      <div style={{ flexGrow: 1, minHeight: 0 }}>
+      <div style={{ flexGrow: 1, minHeight: 0, zIndex: 1, paddingBottom: '80px' }}>
         <ChatBox />
       </div>
-    </div>
+    </motion.div>
   );
 }
 

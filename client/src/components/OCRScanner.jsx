@@ -1,6 +1,7 @@
 import Tesseract from "tesseract.js";
 import { useState, useRef } from "react";
 import { Upload, Car, Calendar, Receipt, IndianRupee, ScanLine, FileCheck2, Camera, Image, X } from "lucide-react";
+import { motion } from "framer-motion";
 
 function OCRScanner() {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -46,8 +47,6 @@ function OCRScanner() {
 
   const handleZoneClick = () => {
     if (isProcessing) return;
-    
-    // Check if viewport is mobile/tablet size
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
       setShowSourceSelector(true);
@@ -57,15 +56,17 @@ function OCRScanner() {
   };
 
   return (
-    <div className="grid-responsive" style={{ gap: '40px' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px' }}>
       
       {/* Upload Zone */}
-      <div 
+      <motion.div 
+        whileHover={!isProcessing ? { scale: 1.02 } : {}}
+        whileTap={!isProcessing ? { scale: 0.98 } : {}}
         onClick={handleZoneClick}
         style={{
           border: '2px dashed rgba(16, 185, 129, 0.4)',
-          borderRadius: 'var(--radius-xl)',
-          background: 'rgba(8, 33, 42, 0.4)',
+          borderRadius: '24px',
+          background: 'rgba(18, 18, 18, 0.6)',
           backdropFilter: 'blur(24px)',
           minHeight: '400px',
           display: 'flex',
@@ -74,92 +75,98 @@ function OCRScanner() {
           justifyContent: 'center',
           position: 'relative',
           overflow: 'hidden',
-          transition: '0.4s',
-          cursor: isProcessing ? 'wait' : 'pointer'
+          transition: 'all 0.4s',
+          cursor: isProcessing ? 'wait' : 'pointer',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
         }}
-        onMouseOver={e => !isProcessing && (e.currentTarget.style.borderColor = 'var(--accent-neon)', e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 245, 212, 0.1) inset')}
-        onMouseOut={e => !isProcessing && (e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.4)', e.currentTarget.style.boxShadow = 'none')}
       >
-        {/* Hidden inputs: One for regular gallery file browse, one with capture environment for phone camera */}
         <input type="file" accept="image/*" onChange={handleImage} ref={fileInputRef} style={{ display: 'none' }} />
         <input type="file" accept="image/*" capture="environment" onChange={handleImage} ref={cameraInputRef} style={{ display: 'none' }} />
         
         {isProcessing ? (
-          <div style={{ textAlign: 'center', zIndex: 10 }}>
-            <ScanLine size={64} color="var(--accent-neon)" className="animate-pulse" style={{ marginBottom: '24px' }} />
-            <h3 className="title-md" style={{ color: 'white', marginBottom: '8px' }}>Scanning Document...</h3>
-            <p style={{ color: 'var(--accent-emerald)', fontWeight: 'bold', fontSize: '1.2rem', marginBottom: '24px' }}>{progress}%</p>
-            <div style={{ width: '200px', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
-              <div style={{ width: `${progress}%`, height: '100%', background: 'var(--gradient-glow)', transition: 'width 0.3s ease' }}></div>
+          <div style={{ textAlign: 'center', zIndex: 10, width: '100%', padding: '0 40px' }}>
+            <ScanLine size={64} color="#00FF66" className="animate-pulse" style={{ margin: '0 auto 24px' }} />
+            <h3 style={{ color: '#F8FAFC', marginBottom: '8px', fontSize: '1.2rem', fontWeight: 600 }}>Scanning Document...</h3>
+            <p style={{ color: '#10B981', fontWeight: '800', fontSize: '1.5rem', marginBottom: '24px' }}>{progress}%</p>
+            <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
+              <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #10B981, #00FF66)', transition: 'width 0.3s ease' }}></div>
             </div>
             
             {/* Animated Laser line */}
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'var(--accent-neon)', boxShadow: '0 0 20px 4px var(--accent-neon)', animation: 'scan 2s infinite linear' }}></div>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: '#00FF66', boxShadow: '0 0 30px 4px #00FF66', animation: 'scan 2.5s infinite linear' }}></div>
           </div>
         ) : (
           <div style={{ textAlign: 'center', zIndex: 10 }}>
             <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '24px', borderRadius: '50%', marginBottom: '24px', display: 'inline-block', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-              <Upload size={48} color="var(--accent-emerald)" />
+              <Upload size={48} color="#10B981" />
             </div>
-            <h3 className="title-md" style={{ color: 'white', marginBottom: '12px' }}>Scan your Challan</h3>
-            <p className="text-body" style={{ maxWidth: '300px', margin: '0 auto' }}>Tap here to take a photo of your physical challan or upload a screenshot to extract details instantly.</p>
+            <h3 style={{ color: '#F8FAFC', marginBottom: '12px', fontSize: '1.2rem', fontWeight: 600 }}>Upload or Take Photo</h3>
+            <p style={{ color: '#A1A1AA', fontSize: '0.9rem', maxWidth: '280px', margin: '0 auto', lineHeight: 1.5 }}>Tap here to provide an image of your challan for instant AI extraction.</p>
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* Results Section */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-          <FileCheck2 size={24} color="var(--text-secondary)" />
-          <h3 className="title-md" style={{ margin: 0 }}>Extracted Results</h3>
+          <FileCheck2 size={24} color="#10B981" />
+          <h3 style={{ margin: 0, fontSize: '1.2rem', color: '#F8FAFC', fontWeight: 600 }}>Extracted Results</h3>
         </div>
         
         {showResults ? (
-          <div className="grid-responsive animate-fade-in-up" style={{ gap: '20px' }}>
-            <div className="glass-card" style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '16px' }}>
-                <Car size={24} color="var(--accent-emerald)" />
-              </div>
-              <div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Vehicle No</p>
-                <p style={{ fontSize: '1.2rem', fontWeight: '700', color: 'white' }}>DL3C AB 1234</p>
-              </div>
-            </div>
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: { transition: { staggerChildren: 0.1 } },
+              hidden: {}
+            }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+          >
+            {[
+              { icon: Car, label: "Vehicle No", value: "DL3C AB 1234", color: "#10B981" },
+              { icon: Calendar, label: "Date", value: "07 Jan, 2023", color: "#00FF66" },
+              { icon: Receipt, label: "Violation Code", value: "0258", color: "#FBBF24" }
+            ].map((item, idx) => (
+              <motion.div 
+                variants={{
+                  hidden: { opacity: 0, x: -20 },
+                  visible: { opacity: 1, x: 0 }
+                }}
+                key={idx} 
+                className="glass-card" 
+                style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '20px' }}
+              >
+                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <item.icon size={24} color={item.color} />
+                </div>
+                <div>
+                  <p style={{ fontSize: '0.85rem', color: '#A1A1AA', marginBottom: '4px' }}>{item.label}</p>
+                  <p style={{ fontSize: '1.2rem', fontWeight: '700', color: '#FFFFFF' }}>{item.value}</p>
+                </div>
+              </motion.div>
+            ))}
             
-            <div className="glass-card" style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '16px' }}>
-                <Calendar size={24} color="var(--accent-neon)" />
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, scale: 0.95 },
+                visible: { opacity: 1, scale: 1 }
+              }}
+              style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '20px', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(18, 18, 18, 0.9))', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}
+            >
+              <div style={{ background: 'rgba(16, 185, 129, 0.2)', padding: '16px', borderRadius: '16px' }}>
+                <IndianRupee size={32} color="#00FF66" />
               </div>
               <div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Date</p>
-                <p style={{ fontSize: '1.2rem', fontWeight: '700', color: 'white' }}>07 Jan, 2023</p>
+                <p style={{ fontSize: '0.9rem', color: '#10B981', marginBottom: '4px', fontWeight: 600 }}>Fine Amount</p>
+                <p style={{ fontSize: '2rem', fontWeight: '800', color: '#00FF66', margin: 0, lineHeight: 1 }}>₹2,500</p>
               </div>
-            </div>
-            
-            <div className="glass-card" style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '16px' }}>
-                <Receipt size={24} color="var(--accent-gold)" />
-              </div>
-              <div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Violation Code</p>
-                <p style={{ fontSize: '1.2rem', fontWeight: '700', color: 'white' }}>0258</p>
-              </div>
-            </div>
-            
-            <div className="glass-card-accent" style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px', background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(180, 83, 9, 0.4))', borderColor: 'rgba(251, 191, 36, 0.3)' }}>
-              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '16px', borderRadius: '16px' }}>
-                <IndianRupee size={24} color="var(--accent-gold)" />
-              </div>
-              <div>
-                <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', marginBottom: '4px' }}>Fine Amount</p>
-                <p style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--accent-gold)' }}>₹2,500</p>
-              </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         ) : (
-          <div className="glass-card flex-center" style={{ minHeight: '300px', flexDirection: 'column', gap: '16px' }}>
+          <div className="glass-card" style={{ minHeight: '350px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', borderStyle: 'dashed', borderColor: 'rgba(255,255,255,0.1)' }}>
             <ScanLine size={48} color="rgba(255,255,255,0.1)" />
-            <p className="text-body text-center" style={{ color: 'rgba(255,255,255,0.3)' }}>No document scanned yet.<br/>Upload or capture an image to see details here.</p>
+            <p style={{ color: '#52525B', textAlign: 'center', lineHeight: 1.6 }}>No document scanned yet.<br/>Upload or capture an image to see details here.</p>
           </div>
         )}
       </div>
@@ -169,7 +176,7 @@ function OCRScanner() {
         <div style={{
           position: 'fixed',
           top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(2, 4, 8, 0.82)',
+          background: 'rgba(10, 10, 10, 0.8)',
           backdropFilter: 'blur(12px)',
           display: 'flex',
           alignItems: 'flex-end',
@@ -180,89 +187,53 @@ function OCRScanner() {
           <div style={{
             width: '100%',
             maxWidth: '500px',
-            background: 'rgba(15, 23, 42, 0.95)',
+            background: '#121212',
             borderTop: '1px solid rgba(16, 185, 129, 0.3)',
             borderRadius: '24px 24px 0 0',
             padding: '24px 24px 40px',
-            boxShadow: '0 -15px 40px rgba(0, 0, 0, 0.6)',
+            boxShadow: '0 -15px 40px rgba(0, 0, 0, 0.8)',
             animation: 'slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
             display: 'flex',
             flexDirection: 'column',
             gap: '16px'
           }} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <h4 style={{ margin: 0, color: 'white', fontSize: '1.1rem', fontWeight: 700, fontFamily: 'inherit', letterSpacing: '0.3px' }}>Select Image Source</h4>
+              <h4 style={{ margin: 0, color: '#F8FAFC', fontSize: '1.2rem', fontWeight: 700 }}>Image Source</h4>
               <button 
                 onClick={() => setShowSourceSelector(false)} 
-                style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+                style={{ background: 'transparent', border: 'none', color: '#A1A1AA', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
               >
-                <X size={20} />
+                <X size={24} />
               </button>
             </div>
 
             <button 
-              onClick={() => {
-                fileInputRef.current?.click();
-                setShowSourceSelector(false);
-              }}
+              onClick={() => { fileInputRef.current?.click(); setShowSourceSelector(false); }}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-                width: '100%',
-                padding: '16px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '16px',
-                color: 'white',
-                fontSize: '0.95rem',
-                fontWeight: 600,
-                textAlign: 'left',
-                cursor: 'pointer',
-                transition: 'background 0.2s'
+                display: 'flex', alignItems: 'center', gap: '16px', width: '100%', padding: '16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', color: '#F8FAFC', textAlign: 'left', cursor: 'pointer', transition: 'background 0.2s'
               }}
-              onMouseOver={e => e.currentTarget.style.background = 'rgba(16, 185, 129, 0.1)'}
-              onMouseOut={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'}
             >
-              <div style={{ background: 'rgba(16, 185, 129, 0.15)', padding: '10px', borderRadius: '12px' }}>
-                <Image size={20} color="var(--accent-emerald)" />
+              <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '12px', borderRadius: '12px' }}>
+                <Image size={24} color="#10B981" />
               </div>
               <div>
-                <div style={{ fontWeight: 700 }}>Upload from Gallery</div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px', fontWeight: 400 }}>Choose an existing challan photo</div>
+                <div style={{ fontWeight: 600, fontSize: '1rem' }}>Photo Gallery</div>
+                <div style={{ fontSize: '0.85rem', color: '#A1A1AA', marginTop: '2px' }}>Choose an existing photo</div>
               </div>
             </button>
 
             <button 
-              onClick={() => {
-                cameraInputRef.current?.click();
-                setShowSourceSelector(false);
-              }}
+              onClick={() => { cameraInputRef.current?.click(); setShowSourceSelector(false); }}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-                width: '100%',
-                padding: '16px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '16px',
-                color: 'white',
-                fontSize: '0.95rem',
-                fontWeight: 600,
-                textAlign: 'left',
-                cursor: 'pointer',
-                transition: 'background 0.2s'
+                display: 'flex', alignItems: 'center', gap: '16px', width: '100%', padding: '16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.05)', borderRadius: '16px', color: '#F8FAFC', textAlign: 'left', cursor: 'pointer', transition: 'background 0.2s'
               }}
-              onMouseOver={e => e.currentTarget.style.background = 'rgba(0, 245, 212, 0.1)'}
-              onMouseOut={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'}
             >
-              <div style={{ background: 'rgba(0, 245, 212, 0.15)', padding: '10px', borderRadius: '12px' }}>
-                <Camera size={20} color="var(--accent-neon)" />
+              <div style={{ background: 'rgba(0, 255, 102, 0.1)', padding: '12px', borderRadius: '12px' }}>
+                <Camera size={24} color="#00FF66" />
               </div>
               <div>
-                <div style={{ fontWeight: 700 }}>Take Photo</div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px', fontWeight: 400 }}>Use camera to scan physical challan</div>
+                <div style={{ fontWeight: 600, fontSize: '1rem' }}>Take Photo</div>
+                <div style={{ fontSize: '0.85rem', color: '#A1A1AA', marginTop: '2px' }}>Use camera to scan challan</div>
               </div>
             </button>
           </div>

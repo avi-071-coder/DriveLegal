@@ -1,33 +1,46 @@
+import { motion } from "framer-motion";
 import Calculator from "../components/Calculator";
-import TopNav from "../components/TopNav";
 
 function CalculatorPage() {
+  const pageVariants = {
+    initial: { opacity: 0, y: 30 },
+    in: { opacity: 1, y: 0 },
+    out: { opacity: 0, y: -30 }
+  };
+
+  const pageTransition = {
+    type: "spring",
+    stiffness: 100,
+    damping: 20
+  };
+
   return (
-    <div className="app-container animate-fade-in-up" style={{ paddingBottom: '60px', position: 'relative' }}>
-      {/* Blended Background Watermark */}
+    <motion.div 
+      initial="initial" 
+      animate="in" 
+      exit="out" 
+      variants={pageVariants} 
+      transition={pageTransition}
+      className="app-container"
+      style={{ paddingBottom: '80px', paddingTop: '40px', minHeight: '100vh', position: 'relative' }}
+    >
       <div style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundImage: 'url("/calculator_bg.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        opacity: 0.15,
+        top: 0, left: 0, right: 0, height: '40vh',
+        background: 'radial-gradient(ellipse at top right, rgba(16, 185, 129, 0.1), transparent 70%)',
         pointerEvents: 'none',
-        zIndex: -1,
-        maskImage: 'radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%)',
-        WebkitMaskImage: 'radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%)'
+        zIndex: -1
       }}></div>
 
-      <div className="page-header" style={{ padding: '20px 0', border: 'none' }}>
-        <h2 className="title-md" style={{ margin: 0 }}>Fine Calculator</h2>
-        <TopNav />
+      <div style={{ marginBottom: '40px' }}>
+        <h2 style={{ fontSize: '2rem', fontWeight: 800, margin: 0, color: '#F8FAFC' }}>
+          Fine <span style={{ color: '#10B981' }}>Calculator</span>
+        </h2>
+        <p style={{ color: '#A1A1AA', marginTop: '8px' }}>Instantly estimate traffic liabilities based on regional laws.</p>
       </div>
 
       <Calculator />
-    </div>
+    </motion.div>
   );
 }
 

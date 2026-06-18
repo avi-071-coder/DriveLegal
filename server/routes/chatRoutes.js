@@ -23,52 +23,60 @@ function cleanResponse(text) {
     .trim();
 }
 
-router.post("/chat", async (req, res) => {
-  try {
-    const { message } = req.body;
+router.post("/chat/stream", async (req, res) => {
+  // Set up SSE headers
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.flushHeaders();
 
+  const { message } = req.body;
+
+  try {
     if (!message) {
-      return res.status(400).json({ error: "Please provide a message." });
+      res.write(`data: ${JSON.stringify({ text: "Please provide a message." })}\n\n`);
+      res.write("data: [DONE]\n\n");
+      return res.end();
     }
 
     if (!process.env.GEMINI_API_KEY) {
-      console.error("GEMINI_API_KEY is missing");
-      return res.status(500).json({ error: "Chat service is temporarily unavailable." });
+      res.write(`data: ${JSON.stringify({ text: "Chat service is temporarily unavailable (Missing API Key)." })}\n\n`);
+      res.write("data: [DONE]\n\n");
+      return res.end();
     }
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-flash-latest",
-    });
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
-    // Fast-failing timeout of 3.5 seconds to instantly fall back if Gemini hangs
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("Gemini API connection timeout")), 3500)
+    const resultStream = await model.generateContentStream(
+      `You are a concise, structured traffic law assistant. Provide a structured, proper, and highly concise response. 
+      - Use simple lists with dashes (-).
+      - Use normal capitalizations for headers.
+      - DO NOT use markdown symbols like asterisks (*) or hash signs (#).
+      - Keep your answer brief and directly to the point.
+
+      Question: ${message}`
     );
 
-    const result = await Promise.race([
-      model.generateContent(
-        `You are a concise, structured traffic law assistant. Provide a structured, proper, and highly concise response. 
-        - Use simple lists with dashes (-).
-        - Use normal capitalizations for headers.
-        - DO NOT use markdown symbols like asterisks (*) or hash signs (#).
-        - Keep your answer brief and directly to the point.
+    for await (const chunk of resultStream) {
+      const chunkText = chunk.text();
+      res.write(`data: ${JSON.stringify({ text: cleanResponse(chunkText) })}\n\n`);
+    }
 
-        Question: ${message}`
-      ),
-      timeoutPromise
-    ]);
-
-    const reply = cleanResponse(result.response.text());
-
-    res.json({ reply });
+    res.write("data: [DONE]\n\n");
+    res.end();
+    
   } catch (error) {
     console.error("Gemini Error, falling back to OpenRouter:", error.message);
     
     if (!process.env.OPENROUTER_API_KEY) {
-      return res.status(503).json({ error: "Gemini is busy and OpenRouter fallback is unavailable (Missing API Key). Please add OPENROUTER_API_KEY to your .env file." });
+      res.write(`data: ${JSON.stringify({ text: "\n\n[Error: Gemini is busy and OpenRouter fallback is unavailable. Please check API keys.]" })}\n\n`);
+      res.write("data: [DONE]\n\n");
+      return res.end();
     }
 
     try {
+      // Require axios locally just for the fallback
+      const axios = require("axios");
       const openRouterResponse = await axios.post(
         "https://openrouter.ai/api/v1/chat/completions",
         {
@@ -80,7 +88,7 @@ router.post("/chat", async (req, res) => {
             },
             {
               role: "user",
-              content: req.body.message
+              content: message
             }
           ]
         },
@@ -93,13 +101,16 @@ router.post("/chat", async (req, res) => {
       );
 
       const reply = cleanResponse(openRouterResponse.data.choices[0].message.content);
-      return res.json({ reply });
+      // Since it's a fallback, we just send the whole chunk at once
+      res.write(`data: ${JSON.stringify({ text: reply })}\n\n`);
+      res.write("data: [DONE]\n\n");
+      res.end();
       
     } catch (fallbackError) {
-      console.error("OpenRouter Fallback Error Details:", fallbackError.response?.data || fallbackError.message);
-      return res.status(500).json({
-        error: "Both Gemini and OpenRouter AI services are currently unavailable. Please try again later.",
-      });
+      console.error("OpenRouter Fallback Error:", fallbackError.message);
+      res.write(`data: ${JSON.stringify({ text: "\n\n[Error: Both Gemini and OpenRouter AI services are currently unavailable. Please try again later.]" })}\n\n`);
+      res.write("data: [DONE]\n\n");
+      res.end();
     }
   }
 });
