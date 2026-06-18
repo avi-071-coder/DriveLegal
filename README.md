@@ -5,7 +5,7 @@ An ultra-premium, AI-powered traffic law assistant providing localized challan c
 ---
 
 ## Overview
-**DriveLegal AI** simplifies traffic law lookup by combining local regulations with state-of-the-art AI. Built with a sleek, dark-themed, glassmorphic design language featuring cobalt blue, neon cyan, and indigo accents. The app offers a geo-fenced fine calculator, intelligent OCR scanner, and a highly responsive AI Legal Assistant with an automatic fast fallback system.
+**DriveLegal AI** simplifies traffic law lookup by combining local regulations with state of the art AI. The app offers a geo-fenced fine calculator, intelligent OCR scanner, and a highly responsive AI Legal Assistant with an automatic fast fallback system.
 
 ---
 
