@@ -537,7 +537,7 @@ function CodexPage() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="app-container" style={{ paddingBottom: '60px', paddingTop: '40px', position: 'relative', minHeight: '100vh' }}>
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="app-container" style={{ paddingBottom: '120px', paddingTop: '40px', position: 'relative', minHeight: '100vh' }}>
       { poppinsFontImport && <style>{poppinsFontImport}</style> }
       
       {/* Blended Background Watermark */}
@@ -559,8 +559,9 @@ function CodexPage() {
 
       <style>{`
         /* Deep Dark Mode Styles */
-        .codex-tabs-bar { display: flex; justify-content: center; gap: 12px; background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); padding: 6px; border-radius: 100px; max-width: 800px; margin: 0 auto 30px; backdrop-filter: blur(24px); }
-        .codex-tab-btn { flex: 1; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 600; color: #A1A1AA; background: transparent; border: none; padding: 10px 20px; border-radius: 100px; cursor: pointer; transition: all 0.3s; white-space: nowrap; text-align: center; }
+        .codex-tabs-bar { display: flex; justify-content: flex-start; gap: 12px; background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); padding: 8px; border-radius: 100px; max-width: 800px; margin: 0 auto 30px; backdrop-filter: blur(24px); overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+        .codex-tabs-bar::-webkit-scrollbar { display: none; }
+        .codex-tab-btn { flex: 0 0 auto; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 600; color: #A1A1AA; background: transparent; border: none; padding: 10px 20px; border-radius: 100px; cursor: pointer; transition: all 0.3s; white-space: nowrap; text-align: center; }
         .codex-tab-btn.active { color: #0A0A0A; background: linear-gradient(135deg, #10B981, #00FF66); border: 1px solid #10B981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
         .dashboard-glass-panel { background: rgba(18, 18, 18, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05); backdrop-filter: blur(24px); display: grid; grid-template-columns: 320px 1fr; min-height: 580px; overflow: hidden; }
         .dashboard-sidebar { border-right: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; background: rgba(10, 10, 10, 0.4); }
