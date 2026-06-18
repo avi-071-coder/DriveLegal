@@ -15,11 +15,8 @@ An ultra-premium, AI-powered traffic law assistant providing localized challan c
 - **AI Legal Assistant:** Ask traffic law questions in plain text and get instant, structured, concise answers (with automatic post-processed plain-text rendering and a 3.5s fast-timeout fallback to OpenRouter).
 - **Challan OCR Scanner:** Instantly extract text from digital uploads or photos of physical challan papers using on-device OCR.
   - **Take Photo (Mobile Integration):** Viewports on phones and tablets feature a bottom drawer option letting users capture physical papers instantly using the native device camera (`capture="environment"` integration) or upload from the library.
-- **Traffic Lexicon (Driver's Codex):** A unified legal dashboard mapping road safety guidelines across four categories: Basic Rules, Constitutional Laws, International Standards, and Road Signs. Features:
-  - Custom vector animations (e.g., roundabout right-of-way motion simulator, spinning global standard network map).
-  - High-fidelity custom illustration background cards mapped uniquely to each guideline.
-  - Standardized `.page-header` layout and radial-masked background watermarks (`codex_bg.jpg`) for perfect interface consistency.
-
+- **Traffic Lexicon (Driver's Codex):** A unified legal dashboard mapping road safety guidelines across four categories: Basic Rules, Constitutional Laws, International Standards, and Road Signs.
+  
 ---
 
 ## Tech Stack
