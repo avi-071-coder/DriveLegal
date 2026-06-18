@@ -34,7 +34,8 @@ function ChatBox() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/chat/stream", {
+      const baseUrl = API.defaults.baseURL;
+      const response = await fetch(`${baseUrl}/api/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: currentInput }),
