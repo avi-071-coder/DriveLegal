@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import Lenis from 'lenis';
 import { AnimatePresence } from "framer-motion";
@@ -41,6 +41,13 @@ function AppContent() {
 
   return (
     <>
+      {/* Global Logo */}
+      <div style={{ position: 'fixed', top: '32px', left: '32px', zIndex: 60 }}>
+        <Link to="/">
+          <img src="/logo-transparent.png" alt="DriveLegal Logo" style={{ height: '45px', objectFit: 'contain' }} />
+        </Link>
+      </div>
+
       {showNav && <GlobalNav />}
       
       {/* Global Background Animation for all pages except Home */}
