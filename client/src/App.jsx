@@ -42,9 +42,9 @@ function AppContent() {
   return (
     <>
       {/* Global Logo */}
-      <div style={{ position: 'fixed', top: '32px', left: '32px', zIndex: 60 }}>
+      <div className="global-logo-container">
         <Link to="/">
-          <img src="/logo-transparent.png" alt="DriveLegal Logo" style={{ height: '45px', objectFit: 'contain' }} />
+          <img src="/logo-transparent.png" alt="DriveLegal Logo" className="global-logo-img" />
         </Link>
       </div>
 
