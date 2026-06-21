@@ -1,80 +1,54 @@
 # DriveLegal AI
 
-An ultra-premium, AI-powered traffic law assistant providing localized challan calculations, document OCR scanning, and interactive legal guidance.
+## The Problem
+Navigating traffic laws and understanding penalty structures is confusing and intimidating for the average driver. Traffic rules vary drastically between regions, physical challans (Fines) are hard to decipher, and finding legally accurate, reliable information quickly is a constant challenge.
 
----
-
-## Overview
-**DriveLegal AI** simplifies traffic law lookup by combining local regulations with state of the art AI. The app offers a geo-fenced fine calculator, intelligent OCR scanner, and a highly responsive AI Legal Assistant with an automatic fast fallback system.
-
----
+## The Solution: DriveLegal AI
+**DriveLegal AI** is an intelligent, nationwide traffic law assistant designed to make legal compliance simple. It provides instant, localized fine calculations, automated document scanning, and reliable AI-driven legal guidance covering all Indian States and Union Territories. 
 
 ## Key Features
-- **Smart Fine Calculator:** Dynamically computes traffic fines based on State, Violation type, and Vehicle Type.
-- **Auto-Location Detection:** Leverages browser geolocation to automatically detect your state and pre-filter local regulations.
-- **AI Legal Assistant:** Ask traffic law questions in plain text and get instant, structured, concise answers (with automatic post-processed plain-text rendering and a 3.5s fast-timeout fallback to OpenRouter).
-- **Challan OCR Scanner:** Instantly extract text from digital uploads or photos of physical challan papers using on-device OCR.
-  - **Take Photo (Mobile Integration):** Viewports on phones and tablets feature a bottom drawer option letting users capture physical papers instantly using the native device camera (`capture="environment"` integration) or upload from the library.
-- **Traffic Lexicon (Driver's Codex):** A unified legal dashboard mapping road safety guidelines across four categories: Basic Rules, Constitutional Laws, International Standards, and Road Signs.
-  
----
+- **Nationwide Fine Calculator:** Instantly estimate accurate traffic fines based on specific states, vehicle types, and over 15+ violation types.
+- **On-Device Challan OCR:** Securely scan physical paper tickets or digital challans directly in the browser. Processing is done entirely on-device via WebAssembly, guaranteeing absolute privacy.
+- **AI Legal Assistant:** Ask direct traffic law questions and receive concise, structured answers. Powered by a high-speed AI routing system with automatic fallbacks for maximum uptime and zero data logging.
+- **Driver's Codex:** A comprehensive digital lexicon of driving regulations, covering Constitutional Laws, International Standards, Road Signs, and Basic Rules.
+- **Enterprise Security:** Built with strict rate limiting, NoSQL injection sanitization, and secure HTTP headers to ensure safe, reliable operations.
 
 ## Tech Stack
-- **Frontend:** React, Vite, Tailwind CSS (Core layouts), Custom CSS Design System (Premium Glassmorphism & custom variables).
-- **Backend:** Node.js, Express, Mongoose (MongoDB).
-- **AI Integration:** Google Gemini API (`gemini-flash-latest`), OpenRouter API (`openrouter/free` fallback), Tesseract.js (On-device OCR).
+- **Frontend:** React, Vite, Framer Motion
+- **Backend:** Node.js, Express, MongoDB (Mongoose)
+- **AI & Processing:** Google Gemini API (Primary), OpenRouter API (Fallback), Tesseract.js (Local OCR)
+- **Security:** Helmet, Express-Rate-Limit, Express-Mongo-Sanitize
 
----
+## Setup & Installation
 
-## Getting Started
-
-### Prerequisites
+### 1. Prerequisites
 - Node.js (v18+)
-- MongoDB Database (Local instance or Atlas URI)
+- MongoDB Database (Local or Atlas)
 - Google Gemini API Key
-- OpenRouter API Key (Optional fallback)
 
----
+### 2. Backend Setup
+Navigate to the server directory and install dependencies:
+```bash
+cd server
+npm install
+```
+Create a `.env` file in the `server` directory:
+```env
+PORT=5000
+MONGO_URI=your_mongodb_uri
+GEMINI_API_KEY=your_gemini_api_key
+OPENROUTER_API_KEY=your_openrouter_key # Optional Fallback
+```
+Seed the nationwide database and start the server:
+```bash
+node seed.js
+npm run dev
+```
 
-## Installation and Run
-
-### 1. Setup Backend
-1. Navigate to the server folder:
-   ```bash
-   cd server
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file in the `server` directory and add your keys:
-   ```env
-   PORT=5000
-   MONGO_URI=your_mongodb_uri
-   GEMINI_API_KEY=your_gemini_api_key
-   OPENROUTER_API_KEY=your_openrouter_api_key_here
-   ```
-4. Seed the database with local laws:
-   ```bash
-   node seed.js
-   ```
-5. Start the backend:
-   ```bash
-   npm run dev
-   ```
-
-### 2. Setup Frontend
-1. Navigate to the client folder:
-   ```bash
-   cd client
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-
+### 3. Frontend Setup
+Open a new terminal, navigate to the client directory and run:
+```bash
+cd client
+npm install
+npm run dev
+```
