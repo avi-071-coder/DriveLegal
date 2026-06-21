@@ -37,8 +37,8 @@ function ChatbotPage() {
         zIndex: 0
       }}></div>
 
-      <div style={{ padding: '24px 32px', zIndex: 1 }}>
-        <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 700, color: '#F8FAFC' }}>
+      <div style={{ padding: '40px 32px 24px', zIndex: 1, textAlign: 'center' }}>
+        <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 800, color: '#F8FAFC' }}>
           DriveLegal <span style={{ color: '#10B981' }}>AI Assistant</span>
         </h2>
       </div>

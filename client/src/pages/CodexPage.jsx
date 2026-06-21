@@ -603,8 +603,11 @@ function CodexPage() {
       `}</style>
 
       {/* Matching Global Header structure */}
-      <div className="page-header" style={{ padding: '20px 0', border: 'none', marginBottom: '20px' }}>
-        <h2 className="title-md" style={{ margin: 0 }}>Driver's Codex</h2>
+      <div style={{ marginBottom: '40px' }}>
+        <h2 style={{ fontSize: '2rem', fontWeight: 800, margin: 0, color: '#F8FAFC' }}>
+          Driver's <span style={{ color: '#10B981' }}>Codex</span>
+        </h2>
+        <p style={{ color: '#A1A1AA', marginTop: '8px' }}>Explore comprehensive traffic laws, regulations, and guidelines.</p>
       </div>
 
       {/* Categories Bar */}
