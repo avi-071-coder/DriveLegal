@@ -4,6 +4,10 @@ const router = express.Router();
 
 const Law = require("../models/Law");
 
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+
 router.get("/laws", async (req, res) => {
   try {
     const laws = await Law.find();
@@ -16,7 +20,7 @@ router.get("/laws", async (req, res) => {
 
 router.get("/laws/:state", async (req, res) => {
   try {
-    const state = req.params.state;
+    const state = escapeRegex(req.params.state);
     const filteredLaws = await Law.find({
       state: { $regex: new RegExp(`^${state}$`, "i") }
     });
