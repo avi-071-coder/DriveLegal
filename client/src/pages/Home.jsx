@@ -76,60 +76,54 @@ function Home() {
 
       <div style={{ maxWidth: '800px', width: '100%', textAlign: 'center', zIndex: 1 }}>
         {/* Greeting Hero */}
-        <motion.h1 
-          variants={itemVariants}
-          style={{ 
-            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', 
-            fontWeight: 800, 
-            lineHeight: 1.1,
-            color: '#F8FAFC',
-            marginBottom: '32px'
-          }}
-        >
-          Good to see you <br/>
-          <span style={{ color: '#10B981' }}>driving safely.</span>
-        </motion.h1>
+        <motion.div variants={itemVariants} style={{ marginBottom: '48px' }}>
+          <h1 
+            style={{ 
+              fontSize: 'clamp(2.5rem, 5vw, 4rem)', 
+              fontWeight: 700, 
+              lineHeight: 1.1,
+              color: '#FFFFFF',
+              letterSpacing: '-0.03em',
+              marginBottom: '16px'
+            }}
+          >
+            Welcome to <span style={{ color: '#10B981' }}>DriveLegal.</span>
+          </h1>
+          <p style={{ color: '#A1A1AA', fontSize: '1.1rem', fontWeight: 300, maxWidth: '500px', margin: '0 auto', lineHeight: 1.5 }}>
+            Your intelligent traffic law assistant. Ask a question, estimate a fine, or scan a challan below.
+          </p>
+        </motion.div>
 
         {/* AI Input Field */}
-        <motion.div variants={itemVariants} style={{ marginBottom: '64px', position: 'relative' }}>
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'var(--gradient-glow)',
-            borderRadius: '24px',
-            filter: 'blur(12px)',
-            opacity: 0.15,
-            transition: 'opacity 0.3s ease'
-          }} className="glow-bg"></div>
-          
+        <motion.div variants={itemVariants} style={{ marginBottom: '64px', position: 'relative', width: '100%', maxWidth: '700px', margin: '0 auto 64px auto' }}>
           <div style={{
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
-            background: 'rgba(18, 18, 18, 0.6)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(16, 185, 129, 0.2)',
-            borderRadius: '24px',
+            background: 'rgba(10, 10, 10, 0.8)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '16px',
             padding: '8px 8px 8px 24px',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
-            transition: 'all 0.3s ease'
+            boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+            transition: 'border-color 0.3s ease'
           }}>
-            <Search size={24} color="#A1A1AA" />
+            <Search size={22} color="#10B981" />
             <input 
               ref={inputRef}
               onFocus={handleInputFocus}
               onClick={handleInputFocus}
               type="text" 
-              placeholder="How can DriveLegal help you today?" 
+              placeholder="How can we help you today?" 
               style={{
                 flex: 1,
                 background: 'transparent',
                 border: 'none',
                 outline: 'none',
                 color: '#FFFFFF',
-                fontSize: '1.1rem',
+                fontSize: '1.05rem',
                 padding: '16px',
-                fontFamily: 'Plus Jakarta Sans, sans-serif'
+                fontFamily: 'inherit'
               }}
             />
             <button 
@@ -137,15 +131,21 @@ function Home() {
               style={{
                 background: '#10B981',
                 border: 'none',
-                borderRadius: '16px',
-                padding: '16px 24px',
-                color: '#0A0A0A',
-                fontWeight: 600,
+                borderRadius: '12px',
+                padding: '14px 24px',
+                color: '#050505',
+                fontWeight: 700,
+                fontSize: '0.95rem',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px'
+                gap: '8px',
+                transition: 'transform 0.2s ease, opacity 0.2s ease'
               }}
+              onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'}
+              onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
             >
               Ask AI <Bot size={18} />
             </button>
@@ -155,32 +155,50 @@ function Home() {
         {/* Quick Access Grid */}
         <motion.div variants={itemVariants} style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-          gap: '20px' 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
+          gap: '24px',
+          width: '100%',
+          maxWidth: '900px',
+          margin: '0 auto'
         }}>
           
           {[
-            { to: '/calculator', icon: Calculator, label: 'Calculator', desc: 'Estimate fines' },
-            { to: '/ocr', icon: ScanLine, label: 'OCR Scanner', desc: 'Scan citations' },
-            { to: '/codex', icon: BookOpen, label: 'Codex', desc: 'Browse traffic laws' }
+            { to: '/calculator', icon: Calculator, label: 'Calculator', desc: 'Estimate state-wise fines' },
+            { to: '/ocr', icon: ScanLine, label: 'OCR Scanner', desc: 'Scan paper citations' },
+            { to: '/codex', icon: BookOpen, label: 'The Codex', desc: 'Browse traffic laws' }
           ].map((item, i) => (
             <Link key={i} to={item.to} style={{ textDecoration: 'none' }}>
               <div 
-                className="glass-card"
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center',
-                  padding: '32px 24px',
+                  alignItems: 'flex-start',
+                  padding: '32px 28px',
                   cursor: 'pointer',
-                  textAlign: 'center',
+                  textAlign: 'left',
                   height: '100%',
-                  background: 'rgba(255,255,255,0.02)'
+                  background: 'rgba(10, 10, 10, 0.6)',
+                  border: '1px solid rgba(255, 255, 255, 0.05)',
+                  borderRadius: '16px',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = 'rgba(20, 20, 20, 0.9)';
+                  e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = 'rgba(10, 10, 10, 0.6)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.05)';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                <item.icon size={40} color="#10B981" style={{ marginBottom: '16px' }} />
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '8px', color: '#F8FAFC' }}>{item.label}</h3>
-                <p style={{ fontSize: '0.9rem', color: '#A1A1AA' }}>{item.desc}</p>
+                <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '12px', borderRadius: '12px', marginBottom: '20px' }}>
+                  <item.icon size={28} color="#10B981" />
+                </div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '8px', color: '#FFFFFF', letterSpacing: '-0.01em' }}>{item.label}</h3>
+                <p style={{ fontSize: '0.95rem', color: '#A1A1AA', lineHeight: 1.5, margin: 0 }}>{item.desc}</p>
               </div>
             </Link>
           ))}

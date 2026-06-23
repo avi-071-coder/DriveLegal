@@ -4,6 +4,7 @@ import Lenis from 'lenis';
 import { AnimatePresence } from "framer-motion";
 
 import Home from "./pages/Home";
+import LandingPage from "./pages/LandingPage";
 import ChatbotPage from "./pages/ChatbotPage";
 import CalculatorPage from "./pages/CalculatorPage";
 import OCRPage from "./pages/OCRPage";
@@ -79,7 +80,8 @@ function AppContent() {
 
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<Home />} />
           <Route path="/chatbot" element={<ChatbotPage />} />
           <Route path="/calculator" element={<CalculatorPage />} />
           <Route path="/ocr" element={<OCRPage />} />

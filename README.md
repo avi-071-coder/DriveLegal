@@ -1,13 +1,13 @@
 # DriveLegal AI
 
 ## The Problem
-Navigating traffic laws and understanding penalty structures is confusing and intimidating for the average driver. Traffic rules vary drastically between regions, physical challans (tickets) are hard to decipher, and finding legally accurate, reliable information quickly is a constant challenge.
+Navigating traffic laws and understanding penalty structures is confusing and intimidating for the average driver. Traffic rules vary drastically between regions, physical challans (Fines) are hard to decipher, and finding legally accurate, reliable information quickly is a constant challenge.
 
 ## The Solution: DriveLegal AI
-**DriveLegal AI** is an intelligent, nationwide traffic law assistant designed to make legal compliance simple. It provides instant, localized fine calculations, automated document scanning, and reliable AI-driven legal guidance covering all 36 Indian States and Union Territories. 
+**DriveLegal AI** is an intelligent, nationwide traffic law assistant designed to make legal compliance simple. It provides instant, localized fine calculations, automated document scanning, and reliable AI-driven legal guidance covering all Indian States and Union Territories. 
 
 ## Key Features
-- **Nationwide Fine Calculator:** Instantly estimate accurate traffic fines based on specific states, vehicle types (including 3-wheelers and Scootys), and over 15+ violation types.
+- **Nationwide Fine Calculator:** Instantly estimate accurate traffic fines based on specific states, vehicle types, and over 15+ violation types.
 - **On-Device Challan OCR:** Securely scan physical paper tickets or digital challans directly in the browser. Processing is done entirely on-device via WebAssembly, guaranteeing absolute privacy.
 - **AI Legal Assistant:** Ask direct traffic law questions and receive concise, structured answers. Powered by a high-speed AI routing system with automatic fallbacks for maximum uptime and zero data logging.
 - **Driver's Codex:** A comprehensive digital lexicon of driving regulations, covering Constitutional Laws, International Standards, Road Signs, and Basic Rules.
