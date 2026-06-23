@@ -43,11 +43,13 @@ function AppContent() {
   return (
     <>
       {/* Global Logo */}
-      <div className="global-logo-container">
-        <Link to="/">
-          <img src="/logo-transparent.png" alt="DriveLegal Logo" className="global-logo-img" />
-        </Link>
-      </div>
+      {showNav && (
+        <div className="global-logo-container">
+          <Link to="/">
+            <img src="/logo-transparent.png" alt="DriveLegal Logo" className="global-logo-img" />
+          </Link>
+        </div>
+      )}
 
       {showNav && <GlobalNav />}
       

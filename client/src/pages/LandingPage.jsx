@@ -294,7 +294,7 @@ export default function LandingPage() {
         <div className="flex items-center gap-6 pointer-events-auto">
           <button 
             onClick={() => navigate('/dashboard')}
-            className="hidden md:block text-sm font-bold uppercase tracking-wider text-[#10B981] hover:text-white transition-colors"
+            className="block text-sm font-bold uppercase tracking-wider text-[#10B981] hover:text-white transition-colors"
           >
             Dashboard
           </button>
