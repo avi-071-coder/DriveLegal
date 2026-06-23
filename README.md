@@ -37,7 +37,7 @@ Create a `.env` file in the `server` directory:
 PORT=5000
 MONGO_URI=your_mongodb_uri
 GEMINI_API_KEY=your_gemini_api_key
-OPENROUTER_API_KEY=your_openrouter_key # Optional Fallback
+OPENROUTER_API_KEY=your_openrouter_key
 ```
 Seed the nationwide database and start the server:
 ```bash
