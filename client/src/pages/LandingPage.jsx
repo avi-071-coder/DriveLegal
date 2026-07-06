@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Environment } from '@react-three/drei';
 import * as THREE from 'three';
@@ -155,19 +154,13 @@ export default function LandingPage() {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      smoothTouch: false,
-    });
+    document.documentElement.classList.add('snap-y', 'snap-mandatory');
+    return () => {
+      document.documentElement.classList.remove('snap-y', 'snap-mandatory');
+    };
+  }, []);
 
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
-
+  useEffect(() => {
     if (!isLoading) {
       let ctx = gsap.context(() => {
         
@@ -178,8 +171,6 @@ export default function LandingPage() {
               trigger: chapter,
               start: "top top",
               end: "+=100%", 
-              pin: true,
-              pinSpacing: false,
               scrub: 1, 
             }
           });
@@ -277,7 +268,6 @@ export default function LandingPage() {
 
       return () => {
         ctx.revert();
-        lenis.destroy();
       };
     }
   }, [isLoading]);
@@ -310,7 +300,7 @@ export default function LandingPage() {
       </div>
 
       {/* CH 1 */}
-      <section className="cinematic-chapter relative h-screen w-full flex items-center justify-center overflow-hidden z-[0] bg-[#050505]">
+      <section className="cinematic-chapter sticky top-0 snap-always snap-start h-screen w-full flex items-center justify-center overflow-hidden z-[0] bg-[#050505]">
         <div className="chapter-bg absolute inset-0 w-full h-full">
            <img src="/ch1_commute.png" className="w-full h-full object-cover opacity-60 pointer-events-none" alt="Commute" />
         </div>
@@ -329,7 +319,7 @@ export default function LandingPage() {
       </section>
 
       {/* CH 2 */}
-      <section className="cinematic-chapter relative h-screen w-full flex items-center justify-center overflow-hidden z-[1] bg-[#020202]">
+      <section className="cinematic-chapter sticky top-0 snap-always snap-start h-screen w-full flex items-center justify-center overflow-hidden z-[1] bg-[#020202]">
         <div className="chapter-bg absolute inset-0 w-full h-full mix-blend-luminosity">
           <img src="/ch2_flash.png" className="w-full h-full object-cover opacity-50 pointer-events-none" alt="Flash" />
         </div>
@@ -348,7 +338,7 @@ export default function LandingPage() {
       </section>
 
       {/* CH 3 */}
-      <section id="chapter-confusion" className="cinematic-chapter relative h-screen w-full flex items-center justify-center overflow-hidden z-[2] bg-[#0A0A0A]">
+      <section id="chapter-confusion" className="cinematic-chapter sticky top-0 snap-always snap-start h-screen w-full flex items-center justify-center overflow-hidden z-[2] bg-[#0A0A0A]">
         <img src="/ch3_confusion.png" className="confusion-float absolute top-0 left-0 w-full h-full object-cover opacity-40 mix-blend-screen pointer-events-none" alt="Confusion" />
         <div className="content-block relative z-20 max-w-5xl px-6 text-center w-full">
           <h2 className="text-[12vw] md:text-[8vw] font-bold uppercase tracking-tighter leading-none mb-6">
@@ -363,7 +353,7 @@ export default function LandingPage() {
       </section>
 
       {/* CH 4 */}
-      <section className="cinematic-chapter relative h-screen w-full flex items-center justify-center overflow-hidden z-[3] bg-[#050505]">
+      <section className="cinematic-chapter sticky top-0 snap-always snap-start h-screen w-full flex items-center justify-center overflow-hidden z-[3] bg-[#050505]">
         <div className="chapter-bg absolute inset-0 w-full h-full mix-blend-screen">
           <img src="/ch4_clarity.png" className="w-full h-full object-cover opacity-60 pointer-events-none" alt="Clarity" />
         </div>
@@ -381,7 +371,7 @@ export default function LandingPage() {
       </section>
 
       {/* CH 5 */}
-      <section className="cinematic-chapter relative h-screen w-full flex items-end pb-32 px-6 md:px-20 overflow-hidden z-[4] bg-[#000000]">
+      <section className="cinematic-chapter sticky top-0 snap-always snap-start h-screen w-full flex items-end pb-32 px-6 md:px-20 overflow-hidden z-[4] bg-[#000000]">
         <div className="chapter-bg absolute inset-0 w-full h-full">
           <img src="/ch5_engine.png" className="w-full h-full object-cover opacity-70 pointer-events-none" alt="Engine" />
         </div>
@@ -401,7 +391,7 @@ export default function LandingPage() {
       </section>
 
       {/* CH 6 */}
-      <section className="cinematic-chapter relative h-screen w-full flex items-center px-6 md:px-20 overflow-hidden z-[5] bg-[#020202]">
+      <section className="cinematic-chapter sticky top-0 snap-always snap-start h-screen w-full flex items-center px-6 md:px-20 overflow-hidden z-[5] bg-[#020202]">
         <div className="chapter-bg absolute inset-0 w-full h-full">
           <img src="/ch6_twin.png" className="w-full h-full object-cover opacity-30 pointer-events-none" alt="Twin" />
         </div>
@@ -420,7 +410,7 @@ export default function LandingPage() {
       </section>
 
       {/* CH 7 */}
-      <section className="cinematic-chapter relative h-screen w-full flex items-center justify-end px-6 md:px-20 overflow-hidden z-[6] bg-[#050505]">
+      <section className="cinematic-chapter sticky top-0 snap-always snap-start h-screen w-full flex items-center justify-end px-6 md:px-20 overflow-hidden z-[6] bg-[#050505]">
         <div className="chapter-bg absolute inset-0 w-full h-full">
           <img src="/ch7_network.png" className="w-full h-full object-cover opacity-60 pointer-events-none" alt="Network" />
         </div>
@@ -441,7 +431,7 @@ export default function LandingPage() {
       </section>
 
       {/* CH 8 */}
-      <section className="cinematic-chapter relative h-screen w-full flex items-center justify-center overflow-hidden z-[7] bg-[#0A0A0A]">
+      <section className="cinematic-chapter sticky top-0 snap-always snap-start h-screen w-full flex items-center justify-center overflow-hidden z-[7] bg-[#0A0A0A]">
         <div className="chapter-bg absolute inset-0 w-full h-full">
           <img src="/ch8_vault.png" className="w-full h-full object-cover opacity-50 pointer-events-none" alt="Vault" />
         </div>
@@ -466,7 +456,7 @@ export default function LandingPage() {
       </section>
 
       {/* CH 9 */}
-      <section className="cinematic-chapter relative h-screen w-full flex flex-col items-center justify-center text-center overflow-hidden z-[8] bg-[#020202]">
+      <section className="cinematic-chapter sticky top-0 snap-always snap-start h-screen w-full flex flex-col items-center justify-center text-center overflow-hidden z-[8] bg-[#020202]">
         <div className="chapter-bg absolute inset-0 w-full h-full mix-blend-luminosity">
           <img src="/hero_interchange.png" className="w-full h-full object-cover opacity-30 pointer-events-none" alt="Final" />
         </div>
