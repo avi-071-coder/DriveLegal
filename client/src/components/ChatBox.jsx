@@ -49,6 +49,8 @@ function ChatBox() {
     recognition.start();
   };
 
+  const streamingTextRef = useRef(null);
+
   const sendMessage = async (overrideInput = null) => {
     const currentInput = typeof overrideInput === 'string' ? overrideInput : input;
     if (!currentInput.trim()) return;
@@ -56,8 +58,8 @@ function ChatBox() {
     setHasInteracted(true);
     const userMessage = { role: "user", content: currentInput };
     
-    // Add user message and an empty bot message placeholder
-    setMessages((prev) => [...prev, userMessage, { role: "bot", content: "" }]);
+    // Add user message only, no empty bot placeholder
+    setMessages((prev) => [...prev, userMessage]);
     if (typeof overrideInput !== 'string') setInput("");
     setIsLoading(true);
 
@@ -73,6 +75,8 @@ function ChatBox() {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
+      
+      let currentStreamText = "";
 
       while (true) {
         const { done, value } = await reader.read();
@@ -84,19 +88,19 @@ function ChatBox() {
         for (const line of lines) {
           if (line.startsWith("data: ")) {
             const dataStr = line.slice(6);
-            if (dataStr === "[DONE]") break;
+            if (dataStr === "[DONE]") {
+              setMessages(prev => [...prev, { role: "bot", content: currentStreamText }]);
+              setIsLoading(false);
+              break;
+            }
             
             try {
               const data = JSON.parse(dataStr);
-              setMessages((prev) => {
-                const newMessages = [...prev];
-                const lastMsgIndex = newMessages.length - 1;
-                // Deep copy the last message to prevent React StrictMode mutation bugs
-                const lastMsg = { ...newMessages[lastMsgIndex] };
-                lastMsg.content += data.text;
-                newMessages[lastMsgIndex] = lastMsg;
-                return newMessages;
-              });
+              currentStreamText += data.text;
+              if (streamingTextRef.current) {
+                streamingTextRef.current.innerText = currentStreamText;
+                scrollToBottom();
+              }
             } catch (e) {
               console.error("Error parsing stream chunk", e);
             }
@@ -104,12 +108,10 @@ function ChatBox() {
         }
       }
     } catch (err) {
-      setMessages((prev) => {
-        const newMessages = [...prev];
-        newMessages[newMessages.length - 1].content = "Sorry, I am having trouble connecting to the server. Please try again.";
-        return newMessages;
-      });
-    } finally {
+      setMessages((prev) => [
+        ...prev, 
+        { role: "bot", content: "Sorry, I am having trouble connecting to the server. Please try again." }
+      ]);
       setIsLoading(false);
     }
   };
@@ -183,10 +185,12 @@ function ChatBox() {
                 <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '10px', borderRadius: '50%', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
                   <Bot size={24} color="#10B981" />
                 </div>
-                <div className="chat-message-bubble-bot" style={{ display: 'flex', gap: '6px', alignItems: 'center', height: '44px' }}>
-                  <span className="dot-pulse" style={{ width: '6px', height: '6px', background: '#10B981', borderRadius: '50%' }}></span>
-                  <span className="dot-pulse delay-1" style={{ width: '6px', height: '6px', background: '#10B981', borderRadius: '50%' }}></span>
-                  <span className="dot-pulse delay-2" style={{ width: '6px', height: '6px', background: '#10B981', borderRadius: '50%' }}></span>
+                <div className="chat-message-bubble-bot">
+                  <p ref={streamingTextRef} style={{ fontSize: '0.95rem', lineHeight: 1.6, color: '#F8FAFC', whiteSpace: 'pre-wrap', margin: 0, minHeight: '24px' }}>
+                    <span className="dot-pulse" style={{ width: '6px', height: '6px', background: '#10B981', borderRadius: '50%', display: 'inline-block' }}></span>
+                    <span className="dot-pulse delay-1" style={{ width: '6px', height: '6px', background: '#10B981', borderRadius: '50%', display: 'inline-block', margin: '0 4px' }}></span>
+                    <span className="dot-pulse delay-2" style={{ width: '6px', height: '6px', background: '#10B981', borderRadius: '50%', display: 'inline-block' }}></span>
+                  </p>
                 </div>
               </div>
             </motion.div>
