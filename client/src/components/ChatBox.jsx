@@ -215,44 +215,48 @@ function ChatBox() {
               </div>
             </motion.div>
           )}
+
+          {/* Quick Prompts under greeting */}
+          {messages.length === 1 && !isLoading && (
+            <div style={{ paddingLeft: '56px', width: '100%', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', width: '100%', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none', scrollbarWidth: 'none' }} className="quick-prompts-scroll">
+                {[
+                  "How do I pay my traffic fine online?",
+                  "What are the standard penalty amounts for common offenses?",
+                  "What happens if I do not pay my e-challan on time?",
+                  "How can I contest a wrong or duplicate challan?"
+                ].map((prompt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => sendMessage(prompt)}
+                    style={{
+                      background: 'rgba(16, 185, 129, 0.05)',
+                      border: '1px solid rgba(16, 185, 129, 0.2)',
+                      color: '#10B981',
+                      padding: '8px 16px',
+                      borderRadius: '100px',
+                      fontSize: '0.85rem',
+                      whiteSpace: 'nowrap',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      fontFamily: 'inherit'
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(16, 185, 129, 0.05)'; }}
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
       </div>
 
       {/* Input Area */}
       <div className="chat-input-container">
-        {/* Quick Prompts */}
-        {!hasInteracted && (
-          <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '12px', paddingBottom: '12px', width: '100%', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none', scrollbarWidth: 'none' }} className="quick-prompts-scroll">
-            {[
-              "How do I pay my traffic fine online?",
-              "What are the standard penalty amounts for common offenses?",
-              "What happens if I do not pay my e-challan on time?",
-              "How can I contest a wrong or duplicate challan?"
-            ].map((prompt, i) => (
-              <button
-                key={i}
-                onClick={() => sendMessage(prompt)}
-                style={{
-                  background: 'rgba(16, 185, 129, 0.1)',
-                  border: '1px solid rgba(16, 185, 129, 0.3)',
-                  color: '#10B981',
-                  padding: '8px 16px',
-                  borderRadius: '100px',
-                  fontSize: '0.85rem',
-                  whiteSpace: 'nowrap',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  fontFamily: 'inherit'
-                }}
-                onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(16, 185, 129, 0.2)'; }}
-                onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(16, 185, 129, 0.1)'; }}
-              >
-                {prompt}
-              </button>
-            ))}
-          </div>
-        )}
         <div className="chat-input-wrapper">
           <input
             type="text"
@@ -295,9 +299,6 @@ function ChatBox() {
           </div>
         </div>
       </div>
-
-      {/* Mask to prevent text leak under the bottom nav bar */}
-      <div className="chat-bottom-mask" />
       
       <style>{`
         .chat-container {
@@ -306,7 +307,6 @@ function ChatBox() {
           height: 100%;
           padding: 0;
           background: #0A0A0A;
-          position: relative;
         }
 
         .chat-messages-area {
@@ -315,7 +315,6 @@ function ChatBox() {
           padding: 24px;
           display: flex;
           flex-direction: column;
-          padding-bottom: 120px;
         }
 
         .chat-message-row {
@@ -356,40 +355,25 @@ function ChatBox() {
         }
 
         .chat-input-container {
-          position: absolute;
-          bottom: 24px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 90%;
-          max-width: 800px;
-          z-index: 10;
+          width: 100%;
+          padding: 16px 24px 24px 24px;
+          background: #0A0A0A;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
           display: flex;
           flex-direction: column;
           align-items: center;
+          z-index: 10;
         }
 
         .chat-input-wrapper {
           display: flex;
           align-items: center;
-          background: rgba(18, 18, 18, 0.85);
-          backdrop-filter: blur(24px);
+          background: #121212;
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 100px;
           padding: 8px 8px 8px 24px;
           width: 100%;
           max-width: 800px;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-
-        .chat-bottom-mask {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 100px;
-          background: #0A0A0A;
-          z-index: 5;
-          pointer-events: none;
         }
 
         .dot-pulse { animation: pulseBounce 1s infinite alternate; }
@@ -397,18 +381,15 @@ function ChatBox() {
         .delay-2 { animation-delay: 0.4s; }
         @keyframes pulseBounce { 0% { transform: translateY(0); opacity: 0.3; } 100% { transform: translateY(-4px); opacity: 1; } }
 
+        .quick-prompts-scroll::-webkit-scrollbar {
+          display: none;
+        }
+
         @media (max-width: 768px) {
           .chat-bot-inner { max-width: 95%; }
           .chat-user-bubble { max-width: 90%; }
-          .chat-messages-area {
-            padding-bottom: 220px;
-          }
           .chat-input-container {
-            bottom: 90px;
-            width: 95%;
-          }
-          .chat-bottom-mask {
-            height: 160px;
+            padding: 12px 16px 90px 16px; /* Clear mobile bottom nav */
           }
         }
       `}</style>
