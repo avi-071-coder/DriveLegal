@@ -13,6 +13,7 @@ function ChatBox() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -48,15 +49,16 @@ function ChatBox() {
     recognition.start();
   };
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  const sendMessage = async (overrideInput = null) => {
+    const currentInput = typeof overrideInput === 'string' ? overrideInput : input;
+    if (!currentInput.trim()) return;
 
-    const currentInput = input;
+    setHasInteracted(true);
     const userMessage = { role: "user", content: currentInput };
     
     // Add user message and an empty bot message placeholder
     setMessages((prev) => [...prev, userMessage, { role: "bot", content: "" }]);
-    setInput("");
+    if (typeof overrideInput !== 'string') setInput("");
     setIsLoading(true);
 
     try {
@@ -195,6 +197,38 @@ function ChatBox() {
 
       {/* Input Area */}
       <div className="chat-input-container">
+        {/* Quick Prompts */}
+        {!hasInteracted && (
+          <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '12px', paddingBottom: '4px', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none', scrollbarWidth: 'none' }} className="quick-prompts-scroll">
+            {[
+              "How do I pay my traffic fine online?",
+              "What are the standard penalty amounts for common offenses?",
+              "What happens if I do not pay my e-challan on time?",
+              "How can I contest a wrong or duplicate challan?"
+            ].map((prompt, i) => (
+              <button
+                key={i}
+                onClick={() => sendMessage(prompt)}
+                style={{
+                  background: 'rgba(16, 185, 129, 0.1)',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  color: '#10B981',
+                  padding: '8px 16px',
+                  borderRadius: '100px',
+                  fontSize: '0.85rem',
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  fontFamily: 'inherit'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(16, 185, 129, 0.2)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(16, 185, 129, 0.1)'; }}
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="chat-input-wrapper">
           <input
             type="text"
@@ -219,7 +253,7 @@ function ChatBox() {
             >
               <Mic size={20} />
             </button>
-            <button onClick={sendMessage} style={{ 
+            <button onClick={() => sendMessage()} style={{ 
               background: '#10B981', 
               color: '#0A0A0A',
               width: '40px', 
