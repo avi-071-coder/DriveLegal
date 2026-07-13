@@ -16,12 +16,12 @@ function ChatBox() {
   const [hasInteracted, setHasInteracted] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = (smooth = true) => {
+    messagesEndRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto" });
   };
 
   useEffect(() => {
-    scrollToBottom();
+    scrollToBottom(true);
   }, [messages]);
 
   const startVoiceRecognition = () => {
@@ -77,36 +77,56 @@ function ChatBox() {
       const decoder = new TextDecoder("utf-8");
       
       let currentStreamText = "";
+      let buffer = "";
+      let isDone = false;
+
+      const processLine = (line) => {
+        const trimmed = line.trim();
+        if (!trimmed) return;
+        if (trimmed.startsWith("data: ")) {
+          const dataStr = trimmed.slice(6).trim();
+          if (dataStr === "[DONE]") {
+            isDone = true;
+            return;
+          }
+          try {
+            const data = JSON.parse(dataStr);
+            currentStreamText += data.text;
+            if (streamingTextRef.current) {
+              streamingTextRef.current.innerText = currentStreamText;
+              // Fast auto scroll during streaming
+              scrollToBottom(false);
+            }
+          } catch (e) {
+            console.error("Error parsing stream chunk", e, dataStr);
+          }
+        }
+      };
 
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
+        if (done || isDone) {
+          break;
+        }
         
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop(); // Keep the last incomplete line in the buffer
         
         for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const dataStr = line.slice(6);
-            if (dataStr === "[DONE]") {
-              setMessages(prev => [...prev, { role: "bot", content: currentStreamText }]);
-              setIsLoading(false);
-              break;
-            }
-            
-            try {
-              const data = JSON.parse(dataStr);
-              currentStreamText += data.text;
-              if (streamingTextRef.current) {
-                streamingTextRef.current.innerText = currentStreamText;
-                scrollToBottom();
-              }
-            } catch (e) {
-              console.error("Error parsing stream chunk", e);
-            }
-          }
+          processLine(line);
+          if (isDone) break;
         }
       }
+
+      // Commit the completed message to React state
+      setMessages(prev => [...prev, { role: "bot", content: currentStreamText }]);
+      setIsLoading(false);
+      // Smooth scroll to bottom after state update has finished rendering
+      setTimeout(() => {
+        scrollToBottom(true);
+      }, 50);
+
     } catch (err) {
       setMessages((prev) => [
         ...prev, 
@@ -360,7 +380,7 @@ function ChatBox() {
         @media (max-width: 768px) {
           .chat-bot-inner { max-width: 95%; }
           .chat-user-bubble { max-width: 90%; }
-          .chat-input-container { padding: 12px 16px 80px 16px; } /* Give space for mobile bottom nav */
+          .chat-input-container { padding: 12px 16px 96px 16px; } /* Give space for mobile bottom nav */
         }
       `}</style>
     </div>
