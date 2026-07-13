@@ -14,7 +14,7 @@ function GlobalNav() {
   }, []);
 
   const navItems = [
-    { path: '/', icon: <Home size={20} />, label: 'Home' },
+    { path: '/dashboard', icon: <Home size={20} />, label: 'Home' },
     { path: '/calculator', icon: <Calculator size={20} />, label: 'Calculator' },
     { path: '/ocr', icon: <ScanLine size={20} />, label: 'OCR Scanner' },
     { path: '/chatbot', icon: <Bot size={20} />, label: 'AI Chat' },
