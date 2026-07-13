@@ -48,7 +48,7 @@ router.post("/chat/stream", async (req, res) => {
     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
     const resultStream = await model.generateContentStream(
-      `You are a concise, structured traffic law assistant. Provide a structured, proper, and highly concise response. 
+      `You are a concise, structured traffic law assistant. Your answers MUST be specific to Indian traffic laws, the Motor Vehicles Act, and Indian regulations unless the user explicitly asks about another country. Provide a structured, proper, and highly concise response. 
       - Use simple lists with dashes (-).
       - Use normal capitalizations for headers.
       - DO NOT use markdown symbols like asterisks (*) or hash signs (#).
@@ -84,7 +84,7 @@ router.post("/chat/stream", async (req, res) => {
           messages: [
             {
               role: "system",
-              content: "You are a concise, structured traffic law assistant. Provide a structured, proper, and highly concise response. Use simple lists with dashes (-). Use normal capitalizations for headers. DO NOT use markdown symbols like asterisks (*) or hash signs (#). Keep your answer brief and directly to the point."
+              content: "You are a concise, structured traffic law assistant. Your answers MUST be specific to Indian traffic laws, the Motor Vehicles Act, and Indian regulations unless the user explicitly asks about another country. Provide a structured, proper, and highly concise response. Use simple lists with dashes (-). Use normal capitalizations for headers. DO NOT use markdown symbols like asterisks (*) or hash signs (#). Keep your answer brief and directly to the point."
             },
             {
               role: "user",
