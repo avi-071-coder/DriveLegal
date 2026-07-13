@@ -17,7 +17,7 @@ const lawSchema = new mongoose.Schema({
   },
 
   fine: {
-    type: Number,
+    type: String,
     required: true,
   },
 
