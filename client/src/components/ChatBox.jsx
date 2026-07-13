@@ -282,7 +282,7 @@ function ChatBox() {
           flex-direction: column;
           height: 100%;
           padding: 0;
-          position: relative;
+          background: #0A0A0A;
         }
 
         .chat-messages-area {
@@ -291,7 +291,6 @@ function ChatBox() {
           padding: 24px;
           display: flex;
           flex-direction: column;
-          padding-bottom: 120px;
         }
 
         .chat-message-row {
@@ -332,24 +331,25 @@ function ChatBox() {
         }
 
         .chat-input-container {
-          position: absolute;
-          bottom: 24px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 90%;
-          max-width: 800px;
+          width: 100%;
+          padding: 16px 24px 24px 24px;
+          background: #0A0A0A;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           z-index: 10;
         }
 
         .chat-input-wrapper {
           display: flex;
           align-items: center;
-          background: rgba(18, 18, 18, 0.85);
-          backdrop-filter: blur(24px);
+          background: #121212;
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 100px;
           padding: 8px 8px 8px 24px;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+          width: 100%;
+          max-width: 800px;
         }
 
         .dot-pulse { animation: pulseBounce 1s infinite alternate; }
@@ -360,7 +360,7 @@ function ChatBox() {
         @media (max-width: 768px) {
           .chat-bot-inner { max-width: 95%; }
           .chat-user-bubble { max-width: 90%; }
-          .chat-input-container { bottom: 90px; } /* Keep above mobile nav */
+          .chat-input-container { padding: 12px 16px 80px 16px; } /* Give space for mobile bottom nav */
         }
       `}</style>
     </div>
