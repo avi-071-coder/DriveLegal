@@ -15,7 +15,7 @@ import GlobalNav from "./components/GlobalNav";
 function AppContent() {
   const location = useLocation();
   const showNav = location.pathname !== "/";
-  const showLogo = showNav && location.pathname !== "/chatbot";
+  const showLogo = showNav;
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);

@@ -306,7 +306,16 @@ function ChatBox() {
           flex-direction: column;
           height: 100%;
           padding: 0;
-          background: #0A0A0A;
+          background: rgba(10, 10, 10, 0.5);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border-left: 1px solid rgba(255, 255, 255, 0.05);
+          border-right: 1px solid rgba(255, 255, 255, 0.05);
+          max-width: 850px;
+          margin: 0 auto;
+          width: 100%;
+          border-radius: 24px 24px 0 0;
+          box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
         }
 
         .chat-messages-area {
@@ -336,28 +345,32 @@ function ChatBox() {
         }
 
         .chat-message-bubble-bot {
-          background: transparent;
-          border: 1px solid rgba(16, 185, 129, 0.2);
+          background: rgba(16, 185, 129, 0.03);
+          border: 1px solid rgba(16, 185, 129, 0.15);
           padding: 16px 20px;
           border-radius: 16px;
           border-top-left-radius: 4px;
+          backdrop-filter: blur(4px);
         }
 
         .chat-user-bubble {
-          background: #1A1A1A;
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           color: #F8FAFC;
           padding: 16px 20px;
           border-radius: 16px;
           border-bottom-right-radius: 4px;
           font-size: 0.95rem;
           max-width: 75%;
+          backdrop-filter: blur(4px);
         }
 
         .chat-input-container {
           width: 100%;
           padding: 16px 24px 24px 24px;
-          background: #0A0A0A;
+          background: rgba(10, 10, 10, 0.6);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
           border-top: 1px solid rgba(255, 255, 255, 0.05);
           display: flex;
           flex-direction: column;
@@ -368,12 +381,13 @@ function ChatBox() {
         .chat-input-wrapper {
           display: flex;
           align-items: center;
-          background: #121212;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(26, 26, 26, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 100px;
           padding: 8px 8px 8px 24px;
           width: 100%;
           max-width: 800px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .dot-pulse { animation: pulseBounce 1s infinite alternate; }

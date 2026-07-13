@@ -26,7 +26,7 @@ function ChatbotPage() {
         display: 'flex', 
         flexDirection: 'column', 
         position: 'relative',
-        background: 'var(--bg-primary)'
+        background: 'transparent'
       }}
     >
       <div style={{
@@ -37,9 +37,9 @@ function ChatbotPage() {
         zIndex: 0
       }}></div>
 
-      <div style={{ padding: '24px 20px 12px', zIndex: 1, textAlign: 'center' }}>
-        <h2 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: '#F8FAFC' }}>
-          DriveLegal <span style={{ color: '#10B981' }}>AI Assistant</span>
+      <div style={{ padding: '24px 80px 12px', zIndex: 1, textAlign: 'center' }}>
+        <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#F8FAFC' }}>
+          DriveLegal <span style={{ color: '#10B981' }}>AI</span>
         </h2>
       </div>
 
