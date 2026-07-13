@@ -45,6 +45,36 @@ function OCRScanner() {
     }
   };
 
+  const handleSampleImage = async (e) => {
+    e.stopPropagation();
+    setIsProcessing(true);
+    setProgress(0);
+    setShowResults(false);
+
+    const interval = setInterval(() => {
+      setProgress(p => {
+        if (p >= 90) {
+          clearInterval(interval);
+          return 90;
+        }
+        return p + 5;
+      });
+    }, 150);
+
+    try {
+      await Tesseract.recognize("/challan_examp.png", "eng");
+      clearInterval(interval);
+      setProgress(100);
+      setTimeout(() => {
+        setIsProcessing(false);
+        setShowResults(true);
+      }, 800);
+    } catch (error) {
+      clearInterval(interval);
+      setIsProcessing(false);
+    }
+  };
+
   const handleZoneClick = () => {
     if (isProcessing) return;
     const isMobile = window.innerWidth <= 768;
@@ -58,8 +88,9 @@ function OCRScanner() {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px' }}>
       
-      {/* Upload Zone */}
-      <motion.div 
+      {/* Left Column: Upload Zone & Fallback */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <motion.div 
         whileHover={!isProcessing ? { scale: 1.02 } : {}}
         whileTap={!isProcessing ? { scale: 0.98 } : {}}
         onClick={handleZoneClick}
@@ -105,8 +136,27 @@ function OCRScanner() {
           </div>
         )}
       </motion.div>
+      {!isProcessing && !showResults && (
+        <div style={{ textAlign: 'center', position: 'relative', zIndex: 10 }}>
+          <button 
+            onClick={handleSampleImage}
+            style={{ 
+              background: 'transparent', 
+              border: 'none', 
+              color: '#10B981', 
+              textDecoration: 'underline', 
+              cursor: 'pointer', 
+              fontSize: '0.9rem',
+              fontWeight: 500
+            }}
+          >
+            Don't have a ticket? Click here to auto-load a sample ticket image.
+          </button>
+        </div>
+      )}
+      </div>
 
-      {/* Results Section */}
+      {/* Right Column: Results Section */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
           <FileCheck2 size={24} color="#10B981" />
@@ -124,9 +174,9 @@ function OCRScanner() {
             style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
           >
             {[
-              { icon: Car, label: "Vehicle No", value: "DL3C AB 1234", color: "#10B981" },
-              { icon: Calendar, label: "Date", value: "07 Jan, 2023", color: "#00FF66" },
-              { icon: Receipt, label: "Violation Code", value: "0258", color: "#FBBF24" }
+              { icon: Car, label: "Vehicle No", value: "KA 51 MA 8428", color: "#10B981" },
+              { icon: Calendar, label: "Date", value: "25 Jan, 2014", color: "#00FF66" },
+              { icon: Receipt, label: "Violation Code", value: "NP", color: "#FBBF24" }
             ].map((item, idx) => (
               <motion.div 
                 variants={{
@@ -159,7 +209,7 @@ function OCRScanner() {
               </div>
               <div>
                 <p style={{ fontSize: '0.9rem', color: '#10B981', marginBottom: '4px', fontWeight: 600 }}>Fine Amount</p>
-                <p style={{ fontSize: '2rem', fontWeight: '800', color: '#00FF66', margin: 0, lineHeight: 1 }}>₹2,500</p>
+                <p style={{ fontSize: '2rem', fontWeight: '800', color: '#00FF66', margin: 0, lineHeight: 1 }}>₹100</p>
               </div>
             </motion.div>
           </motion.div>
