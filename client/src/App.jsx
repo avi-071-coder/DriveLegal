@@ -15,6 +15,7 @@ import GlobalNav from "./components/GlobalNav";
 function AppContent() {
   const location = useLocation();
   const showNav = location.pathname !== "/";
+  const showLogo = showNav && location.pathname !== "/chatbot";
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
@@ -80,7 +81,7 @@ function AppContent() {
   return (
     <>
       {/* Global Logo */}
-      {showNav && (
+      {showLogo && (
         <div className="global-logo-container">
           <Link to="/">
             <img src="/logo-transparent.png" alt="DriveLegal Logo" className="global-logo-img" />

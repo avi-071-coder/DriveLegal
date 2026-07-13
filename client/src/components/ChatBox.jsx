@@ -223,7 +223,7 @@ function ChatBox() {
       <div className="chat-input-container">
         {/* Quick Prompts */}
         {!hasInteracted && (
-          <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '12px', paddingBottom: '4px', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none', scrollbarWidth: 'none' }} className="quick-prompts-scroll">
+          <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', marginBottom: '12px', paddingBottom: '12px', width: '100%', WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none', scrollbarWidth: 'none' }} className="quick-prompts-scroll">
             {[
               "How do I pay my traffic fine online?",
               "What are the standard penalty amounts for common offenses?",
@@ -295,6 +295,9 @@ function ChatBox() {
           </div>
         </div>
       </div>
+
+      {/* Mask to prevent text leak under the bottom nav bar */}
+      <div className="chat-bottom-mask" />
       
       <style>{`
         .chat-container {
@@ -303,6 +306,7 @@ function ChatBox() {
           height: 100%;
           padding: 0;
           background: #0A0A0A;
+          position: relative;
         }
 
         .chat-messages-area {
@@ -311,6 +315,7 @@ function ChatBox() {
           padding: 24px;
           display: flex;
           flex-direction: column;
+          padding-bottom: 120px;
         }
 
         .chat-message-row {
@@ -351,25 +356,40 @@ function ChatBox() {
         }
 
         .chat-input-container {
-          width: 100%;
-          padding: 16px 24px 24px 24px;
-          background: #0A0A0A;
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          position: absolute;
+          bottom: 24px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 90%;
+          max-width: 800px;
+          z-index: 10;
           display: flex;
           flex-direction: column;
           align-items: center;
-          z-index: 10;
         }
 
         .chat-input-wrapper {
           display: flex;
           align-items: center;
-          background: #121212;
+          background: rgba(18, 18, 18, 0.85);
+          backdrop-filter: blur(24px);
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 100px;
           padding: 8px 8px 8px 24px;
           width: 100%;
           max-width: 800px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .chat-bottom-mask {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 100px;
+          background: #0A0A0A;
+          z-index: 5;
+          pointer-events: none;
         }
 
         .dot-pulse { animation: pulseBounce 1s infinite alternate; }
@@ -380,7 +400,16 @@ function ChatBox() {
         @media (max-width: 768px) {
           .chat-bot-inner { max-width: 95%; }
           .chat-user-bubble { max-width: 90%; }
-          .chat-input-container { padding: 12px 16px 96px 16px; } /* Give space for mobile bottom nav */
+          .chat-messages-area {
+            padding-bottom: 220px;
+          }
+          .chat-input-container {
+            bottom: 90px;
+            width: 95%;
+          }
+          .chat-bottom-mask {
+            height: 160px;
+          }
         }
       `}</style>
     </div>
