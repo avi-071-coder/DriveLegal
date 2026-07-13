@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import API from "../api/api";
 import { ChevronRight, MapPin, Gauge, Loader2, Receipt, ShieldCheck } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 function Calculator() {
   const [state, setState] = useState("");
@@ -12,6 +12,7 @@ function Calculator() {
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
+  const [locationError, setLocationError] = useState(false);
 
   useEffect(() => {
     const fetchLaws = async () => {
@@ -64,6 +65,7 @@ function Calculator() {
   const detectLocation = () => {
     if (!navigator.geolocation) return;
     setIsLocating(true);
+    setLocationError(false);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
@@ -80,7 +82,11 @@ function Calculator() {
           setIsLocating(false);
         }
       },
-      () => setIsLocating(false)
+      (error) => {
+        setIsLocating(false);
+        setLocationError(true);
+        setTimeout(() => setLocationError(false), 5000);
+      }
     );
   };
 
@@ -117,6 +123,20 @@ function Calculator() {
             {isLocating ? "Detecting..." : "Auto Detect"}
           </button>
         </div>
+        <AnimatePresence>
+          {locationError && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+              animate={{ opacity: 1, height: 'auto', marginBottom: 16 }}
+              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div style={{ padding: '10px 16px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '8px', color: '#f87171', fontSize: '0.85rem' }}>
+                Location access denied. Please select your state manually below.
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="glass-card mb-6" style={{ marginBottom: '24px', padding: '16px 24px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: state ? '1px solid #10B981' : '1px solid rgba(255, 255, 255, 0.05)' }}>
           <select value={state} onChange={e => setState(e.target.value)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}>
@@ -199,11 +219,22 @@ function Calculator() {
               <span style={{ color: '#FFFFFF', fontWeight: 600, textAlign: 'right', maxWidth: '60%' }}>{violation.toUpperCase()}</span>
             </div>
 
-            <div style={{ borderTop: '2px dashed rgba(255,255,255,0.1)', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ color: '#10B981', fontSize: '1.2rem', fontWeight: 600 }}>TOTAL FINE</span>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#00FF66', margin: 0 }}>
-                ₹{result.fine}
-              </h2>
+            <div style={{ borderTop: '2px dashed rgba(255,255,255,0.1)', paddingTop: '24px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: String(result.fine).includes(' (or ') ? '16px' : '0' }}>
+                <span style={{ color: '#10B981', fontSize: '1.2rem', fontWeight: 600 }}>ESTIMATED FINE:</span>
+                <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#00FF66', margin: 0 }}>
+                  ₹{String(result.fine).split(' (or ')[0].replace('₹', '')}
+                </h2>
+              </div>
+              
+              {String(result.fine).includes(' (or ') && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: '#ef4444', fontSize: '1.1rem', fontWeight: 600 }}>OTHER PENALTIES:</span>
+                  <p style={{ margin: 0, fontSize: '1.2rem', color: '#ef4444', fontWeight: 600, textAlign: 'right' }}>
+                    {String(result.fine).split(' (or ')[1].replace(')', '')}
+                  </p>
+                </div>
+              )}
             </div>
             
           </motion.div>
